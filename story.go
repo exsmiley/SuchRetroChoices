@@ -1,10 +1,11 @@
 package main
 
 import (
-    "fmt"
+    // "fmt"
     "log"
     "strings"
     "strconv"
+    "io/ioutil"
 
     "gopkg.in/yaml.v2"
 )
@@ -23,22 +24,22 @@ type Story struct {
     paths map[int][]int
 }
 
-var elementData = `
-1: s; run; I want to run away; 500
-2: t; talk; Wazzap dude; 100
-`
-
-var pathData = `
-1: 2 3
-2: 3 5 6 7
-`
-
 
 func LoadStory() Story {
     // create Story struct
     story := Story{}
     story.elements = make(map[int]Element)
     story.paths = make(map[int][]int)
+
+    // read files
+    elementData, elementErr := ioutil.ReadFile("config/elements.yaml")
+    if elementErr != nil {
+        log.Printf("yamlFile.Get err   #%v ", elementErr)
+    }
+    pathData, pathErr := ioutil.ReadFile("config/paths.yaml")
+    if pathErr != nil {
+        log.Printf("yamlFile.Get err   #%v ", pathErr)
+    }
 
     // load element data into a map
     elementMap := make(map[int]string)
@@ -76,11 +77,3 @@ func LoadStory() Story {
     
     return story
 }
-
-
-func main() {
-    story := LoadStory()
-    fmt.Println(story)
-}
-
-
