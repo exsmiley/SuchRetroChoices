@@ -19,37 +19,28 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-    // socket stuff
-    server, err := socketio.NewServer(nil)
-    if err != nil {
-        log.Fatal(err)
-    }
-    server.On("connection", func(so socketio.Socket) {
-        log.Println("on connection")
-        so.Join("chat")
-        so.On("chat message", func(msg string) {
-            log.Println("emit:", so.Emit("chat message", msg))
-            so.BroadcastTo("chat", "chat message", msg)
-        })
-        so.On("disconnection", func() {
-            log.Println("on disconnect")
-        })
-    })
-    server.On("error", func(so socketio.Socket, err error) {
-        log.Println("error:", err)
-    })
-
+    // start the mux router
     r := mux.NewRouter()
 
     // serve static files
     s := http.StripPrefix("/static/", http.FileServer(http.Dir("./static/")))
     r.PathPrefix("/static/").Handler(s)
 
+    // handle the socket
+    server, err := socketio.NewServer(nil)
+    if err != nil {
+        log.Fatal(err)
+    }
+    server.On("connection", socketHandler)
+    server.On("error", socketErrorHandler)
+    r.Handle("/socket.io/", server)
+
     // main route
     r.Handle("/", http.FileServer(http.Dir("./static/")))
 
     // API routes
     r.HandleFunc("/hello", helloHandler)
-    r.Handle("/socket.io/", server)
+
+    log.Println("Started Server!")
     http.ListenAndServe(":8000", r)
 }
