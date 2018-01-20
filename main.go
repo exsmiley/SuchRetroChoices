@@ -7,28 +7,6 @@ import (
     "github.com/gorilla/mux"
 )
 
-// specifies either a singular int or list of ints that must be present together
-type Requirement struct {
-    needed []int
-}
-
-// says what options should be given if one of the requirements is met
-type Path struct {
-    options []int
-    requirement []Requirement
-}
-
-type ActionText struct {
-    action string
-    text string
-}
-
-// object with text (id to text of the id) and paths (actions that can result from the specified id)
-type Story struct {
-    actionText map[int]ActionText
-    paths map[int][]Path
-}
-
 // inspiration from:
 // http://www.giantflyingsaucer.com/blog/?p=5635
 
@@ -42,11 +20,14 @@ func main() {
 
     r := mux.NewRouter()
 
+    // serve static files
     s := http.StripPrefix("/static/", http.FileServer(http.Dir("./static/")))
     r.PathPrefix("/static/").Handler(s)
-    // http.Handle("/", r)
-    
+
+    // main route
     r.Handle("/", http.FileServer(http.Dir("./static/")))
+
+    // API routes
     r.HandleFunc("/hello", helloHandler)
 
     http.ListenAndServe(":8000", r)
