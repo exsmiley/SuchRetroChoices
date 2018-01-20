@@ -48,8 +48,8 @@ func main() {
     // derp := Derp{}
     log.Println("Loaded Story:", story)
 
-    fmt.Println(story.getPaths(1))
-    fmt.Println(story.hasEnded(7))
+    fmt.Println(story.getPath(1))
+    // fmt.Println(story.hasEnded(7))
 
     // start the mux router
     r := mux.NewRouter()
