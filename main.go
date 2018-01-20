@@ -5,8 +5,8 @@ import (
     "net/http"
     "log"
     "time"
-    "crypto/sha256"
-    "encoding/hex"
+    // "crypto/sha256"
+    // "encoding/hex"
 
     "github.com/googollee/go-socket.io"
     "github.com/gorilla/mux"
@@ -22,11 +22,9 @@ func cookieMiddleware(h http.Handler) http.Handler  {
         _, cookieFailed := r.Cookie("yummy")
 
         if cookieFailed != nil {
-            now := time.Now()
+            
             expire := time.Now().AddDate(0, 0, 1)
-            h := sha256.New()
-            h.Write([]byte(now.Format(time.RFC3339Nano)))
-            val := hex.EncodeToString(h.Sum(nil))
+            val := genId()
 
             cookie := http.Cookie{Name: "yummy", Value: val, Path: "/", Expires: expire, MaxAge: 86400}
             http.SetCookie(w, &cookie)

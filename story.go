@@ -38,9 +38,10 @@ func (story *Story) getPath(storyId int) Path {
     return story.paths[storyId]
 }
 
-// func (story *Story) hasEnded(storyId int) bool {
-//     return len(story.paths[storyId]) == 0
-// }
+func (story *Story) hasEnded(storyId int) bool {
+    path := story.paths[storyId]
+    return len(path.normal) == 0 && len(path.help) == 0 && len(path.force) == 0
+}
 
 
 // loads the story object from the config files
@@ -51,11 +52,11 @@ func LoadStory() Story {
     story.paths = make(map[int]Path)
 
     // read files
-    elementData, elementErr := ioutil.ReadFile("config/elements.yaml")
+    elementData, elementErr := ioutil.ReadFile("config/elementstest.yaml")
     if elementErr != nil {
         log.Printf("yamlFile.Get err   #%v ", elementErr)
     }
-    pathData, pathErr := ioutil.ReadFile("config/paths.yaml")
+    pathData, pathErr := ioutil.ReadFile("config/pathstest.yaml")
     if pathErr != nil {
         log.Printf("yamlFile.Get err   #%v ", pathErr)
     }

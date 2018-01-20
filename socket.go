@@ -6,19 +6,29 @@ import (
     "github.com/googollee/go-socket.io"
 )
 
+func handleStartup() {
+    // TODO handle logic for when the game starts and routing rooms and stuffs
+}
+
 
 func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
     return func(so socketio.Socket) {
         log.Println("on connection")
 
-        // cookie, _ := so.Request().Cookie("yummy")
-        so.Emit("chat message", "I don't know your name yet! :O")
+        cookieObj, _ := so.Request().Cookie("yummy")
+        cookie := cookieObj.Name
+
+        // check if the user has set a name yet
+        if gm.getName(cookie) == "" {
+            so.Emit("ask name", "I don't know your name yet! :O")
+        } else {
+            so.Emit("chat message", "Welcome back " + gm.getName(cookie))
+        }
 
         // first player needs to define player name
         so.On("name", func(playerName string) {
-            if !gm.isInGame(playerName) {
-                // TODO change to checking about the cookie
-            }
+            // TODO ensure that len(playerName) > 0
+            gm.setName(cookie, playerName)
         })
 
         so.Join("chat")
