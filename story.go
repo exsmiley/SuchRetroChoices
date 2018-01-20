@@ -24,7 +24,20 @@ type Story struct {
     paths map[int][]int
 }
 
+func (story *Story) getElement(storyId int) Element {
+    return story.elements[storyId]
+}
 
+func (story *Story) getPaths(storyId int) []int {
+    return story.paths[storyId]
+}
+
+func (story *Story) hasEnded(storyId int) bool {
+    return len(story.paths[storyId]) == 0
+}
+
+
+// loads the story object from the config files
 func LoadStory() Story {
     // create Story struct
     story := Story{}
@@ -66,11 +79,13 @@ func LoadStory() Story {
     for id, str := range pathMap {
         strPaths := strings.Split(str, " ")
         intPaths := []int{}
+        log.Println(id, intPaths)
 
         for _, s := range strPaths {
             val, _ := strconv.Atoi(s)
             intPaths = append(intPaths, val)
         }
+        log.Println(id, intPaths)
 
         story.paths[id] = intPaths
     }
