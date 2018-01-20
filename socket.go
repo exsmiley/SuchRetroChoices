@@ -66,6 +66,7 @@ func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
         // first player needs to define player name
         so.On("name", func(playerName string) {
             // TODO ensure that len(playerName) > 0
+            log.Println("Saving player name:", playerName)
             gm.setName(cookie, playerName)
         })
 

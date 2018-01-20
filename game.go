@@ -1,7 +1,7 @@
 package main
 
 import (
-    "log"
+    // "log"
 )
 
 type Player struct {
@@ -47,6 +47,7 @@ func newGameMaster(story *Story) GameMaster {
     gm := GameMaster{}
     gm.playerToGame = make(map[string]string) // cookie name to string
     gm.games = make(map[string]Game)
+    gm.cookieToName = make(map[string]string)
     gm.story = story
     return gm
 }
