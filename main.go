@@ -3,7 +3,9 @@ package main
 import (
     "fmt"
     "net/http"
+    "log"
 
+    "github.com/googollee/go-socket.io"
     "github.com/gorilla/mux"
 )
 
@@ -17,6 +19,25 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
+    // socket stuff
+    server, err := socketio.NewServer(nil)
+    if err != nil {
+        log.Fatal(err)
+    }
+    server.On("connection", func(so socketio.Socket) {
+        log.Println("on connection")
+        so.Join("chat")
+        so.On("chat message", func(msg string) {
+            log.Println("emit:", so.Emit("chat message", msg))
+            so.BroadcastTo("chat", "chat message", msg)
+        })
+        so.On("disconnection", func() {
+            log.Println("on disconnect")
+        })
+    })
+    server.On("error", func(so socketio.Socket, err error) {
+        log.Println("error:", err)
+    })
 
     r := mux.NewRouter()
 
@@ -29,6 +50,6 @@ func main() {
 
     // API routes
     r.HandleFunc("/hello", helloHandler)
-
+    http.Handle("/socket.io/", server)
     http.ListenAndServe(":8000", r)
 }
