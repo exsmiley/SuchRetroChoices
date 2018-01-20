@@ -19,6 +19,9 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
+    story := LoadStory()
+    log.Println("Loaded Story:", story)
+
     // start the mux router
     r := mux.NewRouter()
 
