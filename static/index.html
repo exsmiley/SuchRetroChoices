@@ -101,6 +101,12 @@
         $('#messages').prepend($('<li>').text(msg));
         window.scrollTo(0, document.body.scrollHeight);
       });
+      socket.on('ask name', function (data) {
+        console.log('ask name:' + data);
+      })
+      socket.on('room', function (data) {
+        console.log('room:' + JSON.stringify(data));
+      });
     });
   </script>
 

@@ -1,18 +1,20 @@
 package main
 
 import (
-    // "log"
+    "log"
 )
 
 type Player struct {
     cookie string
     score int
-    actions []int
+    actions []string
 }
 
 type Game struct {
-    id string // it will be a uuid
+    Id string // it will be a uuid
+    host string
     players map[string]Player // maps player name to map
+    waiting string // cookie of player that is waiting for the other one
 }
 
 type GameMaster struct {
@@ -21,6 +23,25 @@ type GameMaster struct {
     games map[string]Game
     story *Story
 }
+
+type GameRoom struct {
+    HostId string
+    HostName string
+}
+
+
+type GameRooms struct {
+    Rooms []GameRoom
+}
+
+// struct to send back and forth
+type GameState struct {
+    cookie string
+    score int
+    waiting bool
+    actions []int
+}
+
 
 func newGameMaster(story *Story) GameMaster {
     gm := GameMaster{}
@@ -31,9 +52,9 @@ func newGameMaster(story *Story) GameMaster {
 }
 
 // admin game stuff
-func (gm *GameMaster) isInGame(playerCookie string) bool {
-    _, ok := gm.playerToGame[playerCookie]
-    return ok
+func (gm *GameMaster) isInActiveGame(playerCookie string) bool {
+    game := gm.getGame(playerCookie)
+    return len(game.players) == 2
 }
 
 func (gm *GameMaster) getGame(playerCookie string) Game {
@@ -41,6 +62,7 @@ func (gm *GameMaster) getGame(playerCookie string) Game {
 }
 
 // TODO maybe map cookie to something else for hosts? too lazy for now
+// TODO stop race conditions
 func (gm *GameMaster) joinGame(playerCookie string, host string) bool {
     game, ok := gm.games[gm.playerToGame[host]]
 
@@ -48,20 +70,42 @@ func (gm *GameMaster) joinGame(playerCookie string, host string) bool {
         return false
     }
 
-    game.players[playerCookie] = Player{playerCookie, 0, []int{1}}
-    gm.playerToGame[playerCookie] = game.id
+    // remove unhosted game
+    delete(gm.games, gm.playerToGame[playerCookie])
+
+    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}}
+    gm.playerToGame[playerCookie] = game.Id
 
     return true
 }
 
-func (gm *GameMaster) hostGame(playerCookie string) {
+func (gm *GameMaster) hostGame(playerCookie string) string {
     // gm.games[gm.playerToGame]
-    game := Game{genId(), map[string]Player{}}
-    game.players[playerCookie] = Player{playerCookie, 0, []int{1}}
+    game := Game{genId(), playerCookie, map[string]Player{}, ""}
+    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}}
 
-    gm.playerToGame[playerCookie] = game.id
-    gm.games[game.id] = game
+    gm.playerToGame[playerCookie] = game.Id
+    gm.games[game.Id] = game
+    return game.Id
 }
+
+func (gm *GameMaster) getRooms(playerCookie string) GameRooms {
+    grs := GameRooms{[]GameRoom{}}
+
+    for _, game := range gm.games {
+        hostId := game.host
+        if hostId == playerCookie {
+            continue
+        }
+
+        hostName := gm.getName(hostId)
+        room := GameRoom{hostId, hostName}
+        grs.Rooms = append(grs.Rooms, room)
+    }
+
+    return grs
+}
+
 
 // game utils
 func (gm *GameMaster) getPlayer(playerCookie string) Player {
@@ -88,26 +132,30 @@ func (gm *GameMaster) hasEnded(playerCookie string) bool {
 }
 
 
-func (gm *GameMaster) doAction(playerCookie string, action int) {
+func (gm *GameMaster) doAction(playerCookie string, action string) string {
     player := gm.getPlayer(playerCookie)
     actions := player.actions
-    lastAction := actions[len(actions)-1]
-    path := gm.story.getPath(lastAction)
-    nextElement := gm.story.getElement(action)
+    // lastAction := actions[len(actions)-1]
+    // path := gm.story.getPath(lastAction)
+    // nextElement := gm.story.getElement(action)
 
     // basic util stuff
     player.actions = append(actions, action)
-    player.score += nextElement.points
+    // player.score += nextElement.points
 
-    if intInSlice(action, path.normal) {
-        // TODO normal action
-    } else if intInSlice(action, path.help) {
-        // TODO help action
-    } else if intInSlice(action, path.force) {
-        // TODO force action
-    }
-
+    // if intInSlice(action, path.normal) {
+    //     // TODO normal action
+    // } else if intInSlice(action, path.help) {
+    //     // TODO help action
+    // } else if intInSlice(action, path.force) {
+    //     // TODO force action
+    // }
+    return ""
 }
 
 
+func (gm *GameMaster) getState(playerCookie string) GameState {
+    // TODO and maybe change return type
+    return GameState{}
+}
 

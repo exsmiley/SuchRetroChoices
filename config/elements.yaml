@@ -1,0 +1,207 @@
+start:
+  status: single
+  story: You're on a fieldtrip at Jurassic Museum! It's been hours and the day's getting pretty hot. What do you want to do?
+  choice:
+    A:
+      goto: AnswerTrivia
+      points: 200
+      text: Who cares about the heat? Jurrassic Museum is pretty interesting. I'm going to stay and play some trivia
+    B:
+      goto: BreakAway
+      points: 500
+      text: The teacher is still droning on and on about something prehistoric. Dinosaurs are cool but only up until a certain point. Quick, the teacher isn't looking now, make a break for it!
+
+
+AnswerTrivia:
+  status: single
+  story: FILL WITH TRIVIA
+
+BreakAway:
+  status: single
+  story: You're walking along when all of a sudden you see an unguaded exit and leave the park.
+  conditions:
+    - condition: BreakAway & BreakAway
+      goto: AnotherDitcher
+    - condition: AnswerTrivia & BreakAway
+      goto: MysteryMan
+
+
+AnotherDitcher:
+  status: single
+  text: Hey, looks like there is another kid who decided to ditch the tour. What do you want to do?
+  choice:
+    A:
+      goto: Talk
+      points: 100
+      text: go talk to the other student
+      action: help
+      fallback: MysteryMan
+    B:
+      goto: MysteryMan
+      points: 300
+      text: walk away and continue on your own to city
+
+Talk:
+  status: single
+
+
+
+
+MysteryMan:
+  status: single
+  text: A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . .
+  choice:
+    8a:
+      points: -100
+      action: You have time to kill, might as well help out a soul!
+      special:
+        event: trivia
+        result: 200
+    9a:
+      points: 0
+      action: Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him.
+
+8a:
+  status: single
+  text: It turns out the mysterious man is actually Inigo Montoya and he is oh so grateful for your help. As a token of thanks, he directs you to the next intersection and even offers you bonus points if you answer the question correctly.
+  special:
+    event: trivia
+    result: 300
+  action: go to 12
+
+5:
+  status: single
+  conditions:
+    -condition: 5 & 5
+    text: Looks like you're both headed for the city! Do you want to explore the city together, which means you'll cover less ground, or explore on your own, which gives you more freedom?
+    choice:
+      4b:
+        points: 300
+        action: walk away and continue on your own to city
+      4c:
+        points: 200
+        action: The more the merrier! Unless, of course, your new friend is secretly a serial killer . . .
+    -condition: 5 & 4b
+    text: Rats, it looks like the other person doesn't want to talk to you. Guess you're on your own.
+    goto: 4b
+
+4c:
+  status: together
+  text: You come across an intersection and need to decide which street to take. Left or right?
+  choice:
+    left:
+      points: 300
+      conditions:
+        -condition: left & right
+        text: Darn, looks like your friend wants to go the other way
+        goto: 16
+        -condition: left & left
+        text: Nice! Looks like both of you want to go left.
+        goto: 15
+    right:
+      points: 300
+      conditions:
+        -condition: left & right
+        text: Darn, looks like your friend wants to go the other way
+        goto: 16
+        -condition: right & right
+        text: Awesome! Looks like you both want to check out 34th street.
+        goto: 5b
+
+5b:
+  status: together
+  text: A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . .
+  choice:
+    8b:
+      points: -100
+      action: You have time to kill, might as well help out a soul!
+      special: trivia
+    9b:
+      points: 0
+      action: Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him.
+
+
+9a:
+  status: single
+  text: Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup.
+  special: pop up picture/gif of the quote
+  choice:
+    End1:
+      points: -300
+      action: Well, you haven't been taking MMA classes for nothing. It's a FIGHT!
+    11a:
+      points: -400
+      action: Yikes, you could really use some backup. Maybe if you screamed for help someone would come?
+      special:
+        event: Help Overide
+        goto: InigoSQ
+    12:
+      points: -200
+      action: You're a friggin' track star, and there's no better time to test out your skills than when getting chased by a crazy sword-swinging dude through the streets of Philly.
+
+9b:
+  status: together
+  text: Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup. He challenges you and your partner to a duel. The battle was long and furious, but eventually you defeat Inigo and escape.
+  special:
+    event: -100
+  goto: 15
+
+12:
+  status: single
+  text: It's getting pretty dark now and you kind of want to go home. Where is home?
+  special:
+    event: trivia
+    result: 100
+  choice:
+    13:
+      points: 1300
+      action: You live on Elm street. Sure, some people are a bit superstitious about the street's name, but you're not afraid of lil' Freddy Krueger.
+      special: pop up picture of Freddy
+    14:
+      points: 700
+      action: You're secretly a billionaire and take your private helicoptor back home to New York City.
+
+8b:
+  status: together
+  text: Turns out the mysteirous man is Inigo Montoya and he's grateful for your help! As a token of thanks, he's giving you both some bonus points. However, it's getting pretty dark and you should probably go home soon.
+  special: gain 100 points each
+  special: pop up pic of Inigo
+  goto: 15
+
+15:
+  status: together
+  text: You're nearing the end of Walnut street and now must decide whether you want to split from your friend or continue walking down togehter.
+  choice:
+    split:
+      conditions:
+        -condition: split & split
+        goto: 16
+        -condition: split & stay
+        goto: 16
+    stay:
+      conditions:
+        -condition: split & stay
+        text: shucks, looks like your friend ditched you anyway
+        goto: 16
+        -condition: stay & stay
+        goto: willy wonka
+
+16:
+  status: single
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+End1:
+  text: Alas, it appears that you've severely understimated the skills of a brooding swashbuckler. Inigo kills you (even though you swear you didn't kill his father). Perhaps if you might've survived if you had someone else with you . . .
+  special: ENDING
