@@ -50,6 +50,6 @@ func main() {
 
     // API routes
     r.HandleFunc("/hello", helloHandler)
-    http.Handle("/socket.io/", server)
+    r.Handle("/socket.io/", server)
     http.ListenAndServe(":8000", r)
 }
