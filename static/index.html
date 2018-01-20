@@ -1,71 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Such Retro Choices</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
-  </head>
-  <body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Such Retro Choices</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
+<head>
+  <meta charset="utf-8">
+  <title>Such Retro Choices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="grid-container">
+    <nav class="navbar">
+      <a class="title" href="#">Such Retro Choices</a>
+      <ul class="nav">
+        <li>
+          <a class="nav-item" href="#">Home</a>
+        </li>
+        <li>
+          <a class="nav-item" href="#about">About</a>
+        </li>
+        <li>
+          <a class="nav-item" href="#contact">Contact</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="story">
+      <h3>Story</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
+        dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
+        aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
+        aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
+        Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
+      </p>
     </div>
+    <div class="choices">
+      <h3>Choices</h3>
+      <ul class="choices-list">
+        <li><a class="pure-button">Run!</a></li>
+        <li><a class="pure-button">Stand the ground!</a></li>
+      </ul>
 
-    <div class="container">
-
-      <h1>Hello World!</h1>
-
-    </div> <!-- /container -->
-
-    <div id="story">Hello adventurer!</div>
-
-    <ul id="choices">
-      <li><a>Hello!</a></li>
-    </ul>
-
-    <div id="msg-box-group">
-      <ul id="messages"></ul>
-      <form id="msg-form" action="">
-        <input id="m" autocomplete="off" /><button>Send</button>
-      </form>
     </div>
-    
-    <script src="/static/js/socket.io-1.3.7.js"></script>
-    <script src="/static/js/jquery-1.11.1.js"></script>
-    <script>
-      $(function () {
-        var socket = io();
-        $('form').submit(function(){
-          console.log('trying to send '+ $('#m').val());
-          socket.emit('chat message', $('#m').val());
-          $('#m').val('');
-          return false;
-        });
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
-          window.scrollTo(0, document.body.scrollHeight);
-        });
+  </div>
+
+  <div class="msg-container">
+    <ul id="messages"></ul>
+    <form id="msg-form" action="">
+      <input id="m" autocomplete="off" />
+      <button>
+        <i class="fas fa-paper-plane fa-lg"></i>
+      </button>
+    </form>
+  </div>
+
+  <script src="/static/js/socket.io-1.3.7.js"></script>
+  <script src="/static/js/jquery-1.11.1.js"></script>
+  <script>
+    $(function () {
+      var socket = io();
+      $('form').submit(function () {
+        console.log('trying to send ' + $('#m').val());
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
       });
-    </script>
+      socket.on('chat message', function (msg) {
+        $('#messages').prepend($('<li>').text(msg));
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    });
+  </script>
 
-  </body>
+</body>
+
 </html>

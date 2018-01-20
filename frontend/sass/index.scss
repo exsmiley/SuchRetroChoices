@@ -1,0 +1,108 @@
+$msg-area-height: 100px;
+$msg-form-height: 35px;
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    position: relative;
+    margin: 0;
+    min-height: 100%;
+    font: 13px Helvetica, Arial;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    grid-gap: 10px;
+    padding-bottom: $msg-area-height;
+}
+
+.placeholder {
+    background-color: chocolate;
+}
+
+.msg-container {
+    height: $msg-area-height;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    display: grid;
+    grid-template-rows: auto 40px;
+    grid-gap: 10px;
+}
+
+#msg-form {
+    background: #000;
+    padding: 3px;
+    width: 100%;
+    height: $msg-form-height;
+    position: fixed;
+    bottom: 0;
+}
+
+#msg-form input {
+    border: 0;
+    width: 100%;
+    height: 100%;
+    padding-right: $msg-form-height;
+}
+
+#msg-form button {
+    background: rgb(130, 224, 255);
+    border: none;
+    height: $msg-form-height;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: $msg-form-height;
+}
+
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+#messages li {
+    padding: 5px 5px;
+}
+
+#messages li:nth-child(odd) {
+    background: #eee;
+}
+
+.story {
+    padding: 0 10%;
+}
+
+.choices {
+    padding: 0 10%;
+}
+.choices li {
+    list-style-type: none;
+    margin: 0.5em 0;
+}
+
+
+nav {
+    padding: 0.5em 5%;
+}
+.nav, .nav-item {
+    display: inline;
+}
+
+.title {
+    font-size: 1.2em;
+    color: rgb(228, 15, 121);
+    text-decoration: none;
+}
