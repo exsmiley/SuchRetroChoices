@@ -134,6 +134,17 @@ func (story *Story) checkConditions(storyId string, action1 string, action2 stri
     return ""
 }
 
+func (story *Story) abortCondition(storyId string) (string, int) {
+    el := story.elements[storyId]
+
+    for _, cond := range el.conditions {
+        if cond.requirements[0] != cond.requirements[1] {
+            return cond.next, cond.points
+        }
+    }
+    return "", 0
+}
+
 func (story *Story) hasEnded(storyId string) bool {
     el := story.elements[storyId]
 

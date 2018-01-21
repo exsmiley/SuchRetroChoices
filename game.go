@@ -3,6 +3,7 @@ package main
 import (
     "log"
     // "fmt"
+    "time"
 )
 
 type Player struct {
@@ -10,6 +11,7 @@ type Player struct {
     score int
     states []string
     next string // used after a wait occurs
+    ended bool
 }
 
 type Game struct {
@@ -77,7 +79,7 @@ func (gm *GameMaster) joinGame(playerCookie string, host string) bool {
     // remove unhosted game
     delete(gm.games, gm.playerToGame[playerCookie])
 
-    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}, ""}
+    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}, "", false}
     gm.playerToGame[playerCookie] = game.Id
 
     return true
@@ -86,11 +88,22 @@ func (gm *GameMaster) joinGame(playerCookie string, host string) bool {
 func (gm *GameMaster) hostGame(playerCookie string) string {
     // gm.games[gm.playerToGame]
     game := Game{genId(), playerCookie, map[string]Player{}, ""}
-    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}, ""}
+    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}, "", false}
 
     gm.playerToGame[playerCookie] = game.Id
     gm.games[game.Id] = game
     return game.Id
+}
+
+func (gm *GameMaster) getOtherPlayer(playerCookie string) Player {
+    game := gm.games[gm.playerToGame[playerCookie]]
+    for cookie, player := range game.players {
+        if cookie != playerCookie {
+            return player
+        }
+    }
+    // should never get here
+    return Player{}
 }
 
 func (gm *GameMaster) getRooms(playerCookie string) GameRooms {
@@ -141,6 +154,27 @@ func (gm *GameMaster) hasEnded(playerCookie string) bool {
     return gm.story.hasEnded(lastState)
 }
 
+func (gm *GameMaster) abortWait(playerCookie string, state string) {
+    // give them 15 seconds to catch up TODO maybe make longer
+    time.Sleep(15000 * time.Millisecond)
+
+    player := gm.getPlayer(playerCookie)
+    states := player.states
+    lastState := states[len(states)-1]
+    game := gm.games[gm.playerToGame[playerCookie]]
+
+    log.Println("trying to abort", state, lastState, game.waiting)
+
+    if state == lastState && game.waiting == playerCookie {
+        next, points := gm.story.abortCondition(lastState)
+        player.score += points
+        player.states = append(states, next)
+        game.waiting = ""
+        gm.games[gm.playerToGame[playerCookie]] = game
+        gm.games[gm.playerToGame[playerCookie]].players[playerCookie] = player
+    }
+}
+
 
 func (gm *GameMaster) doAction(playerCookie string, action string) string {
     player := gm.getPlayer(playerCookie)
@@ -164,19 +198,32 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
         otherPlayer.next = otherNext
 
         log.Println("other next", otherPlayer)
+        if otherNext != "" {
+            gm.games[gm.playerToGame[playerCookie]].players[otherCookie] = otherPlayer
 
-        gm.games[gm.playerToGame[playerCookie]].players[otherCookie] = otherPlayer
+            nextNext := gm.story.checkConditions(next, next, otherLastState)
+            player.next = nextNext
+            log.Println("other next2", nextNext)
 
-        nextNext := gm.story.checkConditions(next, next, otherLastState)
-        player.next = nextNext
-        log.Println("other next2", nextNext)
+            game.waiting = ""
+        }
 
-        game.waiting = ""
-        
     } else if gm.story.needsToWait(next) {
-        game.waiting = playerCookie
-
+        log.Println("trying to wait")
         // TODO check other player first to see if they made an action?
+        otherPlayer := gm.getOtherPlayer(playerCookie)
+        otherLastState := otherPlayer.states[len(otherPlayer.states)-1]
+        log.Println(otherLastState, lastState)
+
+        lastLastState := ""
+        if len(states) > 1 {
+            lastLastState = states[len(states)-2]
+        }
+
+        if otherLastState == lastState || otherLastState == lastLastState {
+            game.waiting = playerCookie
+            go gm.abortWait(playerCookie, next)
+        }
     } else {
         player.next = ""
     }
@@ -192,8 +239,9 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
 
     player.states = append(states, next)
 
-    gm.games[gm.playerToGame[playerCookie]].players[playerCookie] = player
     gm.games[gm.playerToGame[playerCookie]] = game
+    gm.games[gm.playerToGame[playerCookie]].players[playerCookie] = player
+
     // log.Println("are they the same?", player, gm.getPlayer(playerCookie))
 
 

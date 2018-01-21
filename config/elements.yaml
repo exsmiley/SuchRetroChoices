@@ -399,7 +399,7 @@ InigoSpecialScreamer:
 Intersection1:
   choice:
     -
-      action: "You live on Elm street. Sure, some people are a bit superstitious about the street's name, but you're not afraid of lil' Freddy Krueger."
+      text: "You live on Elm street. Sure, some people are a bit superstitious about the street's name, but you're not afraid of lil' Freddy Krueger."
       next: FreddyNightmare
       points: 1300
     -
@@ -478,7 +478,7 @@ MysteryMan:
         points: 200
       text: "You have time to kill, might as well help out a soul!"
     -
-      action: "Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him."
+      text: "Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him."
       next: IgnoreInigo
       points: 0
   status: single
