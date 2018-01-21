@@ -50,10 +50,12 @@ func handleStartup(gm *GameMaster, cookie string, so socketio.Socket) {
 // continually reloads
 func reloadGameRoom(gm *GameMaster, cookie string, so socketio.Socket) {
     for !gm.isInActiveGame(cookie) {
-        // TODO send room data
         so.Emit("room", gm.getRooms(cookie))
-        time.Sleep(100 * time.Millisecond)
+        time.Sleep(1000 * time.Millisecond)
     }
+
+    // emit state information once in a game
+    so.Emit("state", gm.getState(cookie))
 }
 
 // appends the username to the message

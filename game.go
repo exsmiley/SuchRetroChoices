@@ -8,6 +8,7 @@ type Player struct {
     cookie string
     score int
     states []string
+    next string // used after a wait occurs
 }
 
 type Game struct {
@@ -74,7 +75,7 @@ func (gm *GameMaster) joinGame(playerCookie string, host string) bool {
     // remove unhosted game
     delete(gm.games, gm.playerToGame[playerCookie])
 
-    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}}
+    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}, ""}
     gm.playerToGame[playerCookie] = game.Id
 
     return true
@@ -83,7 +84,7 @@ func (gm *GameMaster) joinGame(playerCookie string, host string) bool {
 func (gm *GameMaster) hostGame(playerCookie string) string {
     // gm.games[gm.playerToGame]
     game := Game{genId(), playerCookie, map[string]Player{}, ""}
-    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}}
+    game.players[playerCookie] = Player{playerCookie, 0, []string{"start"}, ""}
 
     gm.playerToGame[playerCookie] = game.Id
     gm.games[game.Id] = game
@@ -141,9 +142,23 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
     next, points := gm.story.makeChoice(lastState, action)
     player.score += points
 
-    if gm.story.needsToWait(next) {
+    // handle if other player is waiting
+    if game.waiting != "" {
+        otherCookie := game.waiting
+        otherPlayer := gm.getPlayer(otherCookie)
+        otherLastState := otherPlayer.states[len(otherPlayer.states)-1]
+        otherNext := gm.story.checkConditions(otherLastState, otherLastState, next)
+        otherPlayer.next = otherNext
+
+        nextNext := gm.story.checkConditions(lastState, lastState, otherLastState)
+        player.next = nextNext
+        game.waiting = ""
+    } else if gm.story.needsToWait(next) {
         game.waiting = playerCookie
+    } else {
+        player.next = ""
     }
+
 
     actionString := ""
     if gm.story.triggersHelp(lastState, action) {
@@ -160,7 +175,6 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
 
 
 func (gm *GameMaster) getState(playerCookie string) GameState {
-    // TODO and maybe change return type
     story := gm.story
     player := gm.getPlayer(playerCookie)
     states := player.states
@@ -168,7 +182,7 @@ func (gm *GameMaster) getState(playerCookie string) GameState {
     lastState := states[len(states)-1]
     waiting := game.waiting == playerCookie
 
-    actions := story.getActions(lastState)
+    actions := story.getActions(lastState, player.next)
     text := story.getText(lastState)
 
     return GameState{waiting, text, "", actions}

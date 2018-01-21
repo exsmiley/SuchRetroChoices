@@ -685,7 +685,7 @@ Talk:
       next: ExploreTogether
       points: 200
       text: "You've heard rumors of strange things happening on the streets. Perhaps it's better to take a buddy . . ."
-  status: single
+  status: together
   text: "Looks like you're both going to the city! Do you want to explore the city together or separately?"
 Tunnel:
   choice:
@@ -712,7 +712,7 @@ Walnut:
       condition: "Walnut & Walnut"
       next: Porgs
       status: together
-      text: "You both chose to go down Walnut street! You're walkig past Rittenhouse Square when you notice . . ."
+      text: "You both chose to go down Walnut street! You're walking past Rittenhouse Square when you notice . . ."
     -
       condition: "Walnut & 34th"
       next: SpookyPark

@@ -81,7 +81,7 @@ func (story *Story) triggersForce(storyId string, action string) bool {
 }
 
 // TODO future maybe filter by old actions
-func (story *Story) getActions(storyId string) []string {
+func (story *Story) getActions(storyId string, next string) []string {
     el := story.elements[storyId]
     actions := []string{}
 
@@ -89,6 +89,8 @@ func (story *Story) getActions(storyId string) []string {
         for _, choice := range el.choices {
             actions = append(actions, choice.text)
         } 
+    } else if next != "" {
+        actions = append(actions, next)
     }
     return actions
 }
