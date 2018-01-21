@@ -3,8 +3,9 @@ package main
 import (
     // "fmt"
     "log"
-    // "strings"
+    "strings"
     // "strconv"
+    // "reflect"
     "io/ioutil"
 
     "gopkg.in/yaml.v2"
@@ -17,14 +18,21 @@ type Condition struct {
 
 type Choice struct {
     next string
+    points int
+    fallback string
+    action string
+}
 
+type Special struct {
+    event string
+    result int
 }
 
 type Element struct {
     name string
-    together bool
+    status bool
     text string
-    points int
+    special Special
     choices []Choice
     conditions []Condition
 }
@@ -34,13 +42,6 @@ type Story struct {
     elements map[string]Element
 }
 
-// func (story *Story) getElement(storyId string) Element {
-    // return story.elements[storyId]
-// }
-
-// func (story *Story) getPath(storyId string) Path {
-    // return story.paths[storyId]
-// }
 
 func (story *Story) hasEnded(storyId string) bool {
     // path := story.paths[storyId]
@@ -53,61 +54,105 @@ func (story *Story) hasEnded(storyId string) bool {
 func LoadStory() Story {
     // create Story struct
     story := Story{}
-    // story.elements = make(map[int]Element)
-    // story.paths = make(map[int]Path)
+    story.elements = make(map[string]Element)
 
-    // // read files
-    elementData, elementErr := ioutil.ReadFile("config/elementstest.yaml")
+    // read file
+    elementData, elementErr := ioutil.ReadFile("config/elements.yaml")
     if elementErr != nil {
         log.Printf("yamlFile.Get err   #%v ", elementErr)
     }
-    // pathData, pathErr := ioutil.ReadFile("config/pathstest.yaml")
-    // if pathErr != nil {
-    //     log.Printf("yamlFile.Get err   #%v ", pathErr)
-    // }
-
-    // // load element data into a map
-    elementMap := make(map[int]interface{})
+    elementMap := make(map[string]map[string]interface{})
     err := yaml.Unmarshal([]byte(elementData), &elementMap)
     if err != nil {
             log.Fatalf("error: %v", err)
     }
 
-    // for id, str := range elementMap {
-    //     fields := strings.Split(str, ";")
-    //     together, _ := strconv.ParseBool(strings.TrimSpace(fields[0]))
-    //     points, _ := strconv.Atoi(strings.TrimSpace(fields[3]))
-    //     element := Element{together, strings.TrimSpace(fields[1]), strings.TrimSpace(fields[2]), points}
-    //     story.elements[id] = element
-    // }
+    for k, val := range elementMap {
+        el := Element{}
+        el.name = k
+        el.choices = []Choice{}
+        el.conditions = []Condition{}
+        for k2, val2 := range val {
+            if k2 == "status" {
+                // el.together = val2.(string) != "single"
+            } else if k2 == "text" {
+                // el.text = val2.(string)
+            } else if k2 == "conditions" {
+                
+                val22 := val2.([]interface{})
+                for _, v := range val22 {
+                    condition := Condition{}
+                    v2 := v.(map[interface{}]interface{})
+                    for k4, v5 := range v2 {
+                        k42 := k4.(string)
+                        v52 := v5.(string)
+                        if k42 == "condition" {
+                            reqs := strings.Split(v52, "&")
+                            for i := range reqs {
+                                reqs[i] = strings.TrimSpace(reqs[i])
+                            }
+                            condition.requirements = reqs
+                        } else if k42 == "next" {
+                            condition.next = v52
+                        } 
+                        
+                    }
+                    el.conditions = append(el.conditions, condition)
+                }
+                
+                
+            } else if k2 == "choice" {
+                val22 := val2.([]interface{})
+                for _, v := range val22 {
+                    choice := Choice{}
+                    v2 := v.(map[interface{}]interface{})
+                    for k4, v5 := range v2 {
+                        k42 := k4.(string)
+                        
+                        if k42 == "points" {
+                            v52 := v5.(int)
+                            choice.points = v52
+                        } else {
+                            v52 := v5.(string)
+                            if k42 == "next" {
+                                choice.next = v52
+                            } else if k42 == "fallback" {
+                                choice.fallback = v52
+                            } else if k42 == "action" {
+                                choice.action = v52
+                            }
+                        }
+                        
+                    }
+                    el.choices = append(el.choices, choice)
+                }
 
-    // // load path data into a map
-    // pathMap := make(map[int]string)
-    // err = yaml.Unmarshal([]byte(pathData), &pathMap)
-    // if err != nil {
-    //         log.Fatalf("error: %v", err)
-    // }
+            } else if k2 == "special" {
+                special := Special{}
+                v2 := val2.(map[interface{}]interface{})
+                for k4, v5 := range v2 {
 
-    // for id, str := range pathMap {
-    //     typesOfPaths := [3][]int{}
-    //     metaStrPaths := strings.Split(str, "|")
-    //     for i, str2 := range metaStrPaths {
-    //         strPaths := strings.Split(str2, " ")
-    //         intPaths := []int{}
+                    k42 := k4.(string)
+                    if k42 == "event" {
+                        v52 := v5.(string)
+                        special.event = v52
+                    } else {
+                        v52 := v5.(int)
+                        special.result = v52
+                    }
+                }
+                el.special = special
+            }
+        }
+        
+        story.elements[k] = el
+    }
+    
 
-    //         for _, s := range strPaths {
-    //             val, _ := strconv.Atoi(s)
-    //             if val == 0 {
-    //                 continue
-    //             }
-    //             intPaths = append(intPaths, val)
-    //         }
-
-    //         typesOfPaths[i] = intPaths
-    //     }
-
-    //     story.paths[id] = Path{typesOfPaths[0], typesOfPaths[1], typesOfPaths[2]}
-    // }
     
     return story
+}
+
+func main() {
+    log.Println("Loaded Story:", LoadStory())
 }

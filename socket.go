@@ -17,6 +17,7 @@ Client => Server
 
 Server => Client
     ask name (str): triggers the modal to ask for a name
+    name (str): sends name so it can be seen client side
     chat message (str): puts a message
     chat util (boolean): true if should display the chat
     room (object): data about who is hosting a game
@@ -30,7 +31,7 @@ func handleStartup(gm *GameMaster, cookie string, so socketio.Socket) {
     if gm.getName(cookie) == "" {
         so.Emit("ask name", "I don't know your name yet! :O")
     } else {
-        so.Emit("chat message", "Welcome back " + gm.getName(cookie))
+        so.Emit("name", gm.getName(cookie))
     }
 
     // check if the user is in a room
@@ -52,6 +53,15 @@ func reloadGameRoom(gm *GameMaster, cookie string, so socketio.Socket) {
         so.Emit("room", gm.getRooms(cookie))
         time.Sleep(100 * time.Millisecond)
     }
+}
+
+// appends the username to the message
+func chatMiddleware(gm *GameMaster, cookie string, msg string) string {
+    name := gm.getName(cookie)
+    if name != "" {
+        msg = name + ": " + msg
+    }
+    return msg
 }
 
 
@@ -97,6 +107,7 @@ func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
 
         so.Join("chatTest")
         so.On("chat message", func(msg string) {
+            msg = chatMiddleware(gm, cookie, msg)
             log.Println(so.Emit("chat message", msg), " emit:", msg)
             if gm.isInActiveGame(cookie) {
                 so.BroadcastTo(gm.getGame(cookie).Id, "chat message", msg)

@@ -112,6 +112,12 @@
       socket.on('ask name', function (data) {
         console.log('ask name:' + data);
       })
+
+      // set the name gotten from the server since can't set cookie serverside unless do through cookie but lazy lol
+      socket.on('name', function (name) {
+        console.log('got name:' + name);
+        $('#pn').val(name)
+      })
       socket.on('room', function (data) {
         console.log('room:' + JSON.stringify(data));
       });
