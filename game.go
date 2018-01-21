@@ -7,7 +7,7 @@ import (
 type Player struct {
     cookie string
     score int
-    actions []string
+    states []string
 }
 
 type Game struct {
@@ -36,10 +36,10 @@ type GameRooms struct {
 
 // struct to send back and forth
 type GameState struct {
-    cookie string
-    score int
     waiting bool
-    actions []int
+    text string
+    special string
+    actions []string
 }
 
 
@@ -126,37 +126,51 @@ func (gm *GameMaster) setName(playerCookie string, name string) {
 // check if the player's game has ended
 func (gm *GameMaster) hasEnded(playerCookie string) bool {
     player := gm.getPlayer(playerCookie)
-    actions := player.actions
-    lastAction := actions[len(actions)-1]
-
-    return gm.story.hasEnded(lastAction)
+    states := player.states
+    lastState := states[len(states)-1]
+    return gm.story.hasEnded(lastState)
 }
 
 
 func (gm *GameMaster) doAction(playerCookie string, action string) string {
     player := gm.getPlayer(playerCookie)
-    actions := player.actions
-    // lastAction := actions[len(actions)-1]
-    // path := gm.story.getPath(lastAction)
-    // nextElement := gm.story.getElement(action)
+    states := player.states
+    game := gm.games[gm.playerToGame[playerCookie]]
+    lastState := states[len(states)-1]
 
-    // basic util stuff
-    player.actions = append(actions, action)
-    // player.score += nextElement.points
+    next, points := gm.story.makeChoice(lastState, action)
+    player.score += points
 
-    // if intInSlice(action, path.normal) {
-    //     // TODO normal action
-    // } else if intInSlice(action, path.help) {
-    //     // TODO help action
-    // } else if intInSlice(action, path.force) {
-    //     // TODO force action
-    // }
-    return ""
+    if gm.story.needsToWait(next) {
+        game.waiting = playerCookie
+    }
+
+    actionString := ""
+    if gm.story.triggersHelp(lastState, action) {
+        actionString = "help"
+        game.waiting = playerCookie
+    } else if gm.story.triggersForce(lastState, action) {
+        actionString = "force"
+    }
+
+    player.states = append(states, next)
+
+    return actionString
 }
 
 
 func (gm *GameMaster) getState(playerCookie string) GameState {
     // TODO and maybe change return type
-    return GameState{}
+    story := gm.story
+    player := gm.getPlayer(playerCookie)
+    states := player.states
+    game := gm.games[gm.playerToGame[playerCookie]]
+    lastState := states[len(states)-1]
+    waiting := game.waiting == playerCookie
+
+    actions := story.getActions(lastState)
+    text := story.getText(lastState)
+
+    return GameState{waiting, text, "", actions}
 }
 

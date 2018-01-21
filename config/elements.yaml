@@ -1,82 +1,752 @@
-start:
-  status: single
-  text: You're on a fieldtrip at Jurassic Museum! It's been hours and the day's getting pretty hot. What do you want to do?
-  choice:
-    - next: AnswerTrivia
-      points: 200
-      text: Who cares about the heat? Jurrassic Museum is pretty interesting. I'm going to stay and play some trivia
-    - next: BreakAway
-      points: 500
-      text: The teacher is still droning on and on about something prehistoric. Dinosaurs are cool but only up until a certain point. Quick, the teacher isn't looking now, make a break for it!
-
-
-AnswerTrivia:
-  status: single
-  text: FILL WITH TRIVIA
-
-BreakAway:
-  status: single
-  text: You're walking along when all of a sudden you see an unguaded exit and leave the park.
+---
+34th:
   conditions:
-    - condition: BreakAway & BreakAway
-      next: AnotherDitcher
-    - condition: AnswerTrivia & BreakAway
-      next: MysteryMan
-
-
+    -
+      condition: "34th & 34th"
+      next: EatingPlace
+      text: "You both chose to go down 34th Street! You're growing hungry, where do you want to eat?"
+    -
+      condition: "34th & Walnut"
+      next: SpookyPark
+      text: "Welp. It looks like you wanted to down different streets."
 AnotherDitcher:
-  status: single
-  text: Hey, looks like there is another kid who decided to ditch the tour. What do you want to do?
   choice:
-    - name: A1
+    -
+      action: help1
+      fallback: MysteryMan
+      name: Talk
       next: Talk
       points: 100
-      text: go talk to the other student
-      action: help
-      fallback: MysteryMan
-    - name: A2
+      text: "go talk to the other student"
+    -
       next: MysteryMan
       points: 300
-      text: walk away and continue on your own to city
-
-Talk:
+      text: "walk away and continue on your own to city"
   status: single
-
-
-
-
-MysteryMan:
+  text: "Hey, looks like there is another kid who decided to ditch the tour. What do you want to do?"
+AnswerTrivia:
   status: single
-  text: A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . .
+  text: "FILL WITH TRIVIA"
+Aunt1:
   choice:
-    - next: 8a
-      points: -100
-      action: You have time to kill, might as well help out a soul!
-    - next: 9a
+    -
+      next: ChocRiver
+      points: -300
+      text: "you buy some very nice chocolate for her and she lets your behaviour slide. in fact, she even drops you off at . . ."
+    -
+      next: End4
       points: 0
-      action: Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him.
-
-8a:
+      text: "no chocolate is worth 300 points."
   status: single
-  text: It turns out the mysterious man is actually Inigo Montoya and he is oh so grateful for your help. As a token of thanks, he directs you to the next intersection and even offers you bonus points if you answer the question correctly.
+  text: "Your aunt isn't too happy that you're skipping school, even if it's for a field trip. However, she's also prone to bribery, and perhaps if you bribe her with chocolate she won't send you back to school."
+BefriendFreddy1:
+  next: FreddyNightmare2
+  special:
+    event: "Freddy chases you through your dreams"
+    points: -400
+  status: single
+  text: "Freddy seems confused with your attempts of friendliness, and tries to attack you. You wake up covered in cold sweat."
+BefriendFreddy2:
+  next: End6
+  special:
+    event: "You befriend Freddy"
+    points: 800
+  status: single
+  text: "At first it looks like Freddy might try to attack you again like last time. But you're patient and it pays off."
+BreakAway:
+  conditions:
+    -
+      condition: "BreakAway & BreakAway"
+      next: AnotherDitcher
+    -
+      condition: "AnswerTrivia & BreakAway"
+      next: MysteryMan
+  status: single
+  text: "You're walking along when all of a sudden you see an unguaded exit and leave the park."
+ChatWithFerris:
+  next: Aunt1
   special:
     event: trivia
-    result: 300
-  action: go to 12
-
-
-
-
-
-
-
-
-
-
-
-
+    points: 200
+  status: single
+  text: "Ferris is so glad you decided to talk with him for a bit! He even offers you some bonus points if you can answer this question correctly!"
+ChocRiver:
+  choice:
+    -
+      next: Tunnel
+      points: 300
+      text: "run away from the river and into the tunnels"
+    -
+      next: Jaws
+      points: 400
+      text: "You decide to stand your ground and see what's in the river"
+  status: single
+  text: "there's something rippling in the water . . . a very forboding theme song plays in the background that sounds like da-dun da-dun da-dun"
+City1:
+  Choice:
+    -
+      name: RightWay
+      next: RightWay
+      points: 400
+    -
+      name: LeftWay
+      next: LeftWay
+      points: 300
+  status: together
+  text: "Shadows creep along the sidewalks, and even the wind seems malicious as it whips through the streets. You're sure glad you have a friend with you. However, you've reached an intersection. Do you want to go left or right?"
+DeepSpace:
+  choice:
+    -
+      next: LightSide
+      points: 400
+      text: "Light side!"
+    -
+      next: End16
+      points: 600
+      text: "Dark side!"
+  status: single
+  text: "After many years in space, you must make a choice. Which side are you on?"
+ET:
+  choice:
+    -
+      next: RocketTrivia1
+      text: "the spaceship manual is missing several parts. If you can answer 3 questions correctly, not only will you earn many points, you'll even get to visit the moon! But miss a question and the ship will implode..."
+    -
+      next: DeepSpace
+      points: -300
+      text: "He'll give you fuel to explore deep space! But at a price of course"
+    -
+      next: End11
+      points: 300
+      text: "Or you can become a jedi. Turns out ET is pretty good friends with Luke and can hook you up. However, being a jedi doesn't earn you much."
+  special:
+    event: "image of ET pops up"
+    result: "display pic"
+  status: single
+  text: "ET pops out of the box! He's so thankful you released him from his prison and offers you two choices..."
+EatingPlace:
+  choice:
+    -
+      name: Halal
+      next: Halal
+      points: -100
+    -
+      name: ShakeShack
+      next: ShakeShack
+      points: -200
+  status: together
+  text: "There's a Shake Shack and a Halal food truck. Where do you want to eat?"
 End1:
-  text: Alas, it appears that you've severely understimated the skills of a brooding swashbuckler. Inigo kills you (even though you swear you didn't kill his father). Perhaps if you might've survived if you had someone else with you . . .
   special:
     event: ENDING
-    result: 0
+    points: 0
+  text: "Alas, it appears that you've severely understimated the skills of a brooding swashbuckler. Inigo kills you (even though you swear you didn't kill his father). Perhaps if you might've survived if you had someone else with you . . ."
+End10:
+  special:
+    event: ENDING
+    points: 300
+  text: "Congrats! You've proven yourself a space pro! You make a successful touchdown on the moon and stake your personal flag there."
+End11:
+  special:
+    event: ENDING
+    points: 400
+  text: "You spend the rest of your life as a jedi hanging out with Chewie, Luke, Leia, and the crew"
+End12:
+  special:
+    ending: -200
+    event: ENDING
+  text: "Yikes! The candy makes you both bouyant and you float up and up and up and away . . ."
+End13:
+  special:
+    event: ENDING
+    points: 0
+  text: "you escaped the cave-in and make it out of the tunnel! Only to somehow wind up back at Jurassic Museum . . ."
+End14:
+  special:
+    event: ENDING
+    points: -200
+  text: "The tetris blocks were too much to handle and you got crushed."
+End15:
+  special:
+    event: ENDING
+    points: -300
+  text: "Welp. I guess Jaws was hungry. Fish might be friends and not food, but this clearly doesn't apply to humans."
+End16:
+  special:
+    event: ENDING
+    points: -300
+  text: "Yikes! Looks like the promise of power and points corrupted your soul."
+End17:
+  special:
+    event: ENDING
+    points: 100
+  text: "Well, Chewie appreciated you giving him that porg to eat and gifts you some points. However, porgs are now extinct thanks to you since that was the last porg in existance. Nice job."
+End18:
+  special:
+    event: ENDING
+    points: -200
+  text: "Chewie catches up to you and he's not too happy that you tried to steal his meal . . ."
+End19:
+  special:
+    event: ENDING
+    points: 300
+  text: "You live happily ever after with your porg fam."
+End2:
+  special:
+    event: ENDING
+    points: -200
+  text: "Well, it looks like either you didn't scream loud enough or people just aren't very friendly because nobody runs to your aid. Inigo skewers you despite you protesting that you didn't kill his father."
+End3:
+  special:
+    event: ENDING
+    points: -100
+  text: "Well! How rude of the other person to walk away from you even when you clearly needed help! Unfortunately, Inigo chases you down."
+End4:
+  special:
+    event: ENDING
+    points: 100
+  text: "on a second thought, perhaps that field trip wasn't that bad. you decide to go back with the class and call it a day."
+End5:
+  special:
+    event: ENDING
+    points: 300
+  text: "You become incredibly skilled with lucid dreaming from battling Freddy and now become a Dream Guardian, protecting the citizens of Elm Street safe from Freddy!"
+End6:
+  special:
+    event: ENDING
+    points: 0
+  text: "You and Freddy become BFFs, and you even gain Freddy's ability to walk inot other people's dreams! Of course, how you choose to use that power is up to you...."
+End7:
+  special:
+    ending: -100
+    event: ENDING
+  text: "your aunt isn't too happy with you skipping class and makes you go back to school."
+End8:
+  special:
+    ending: 100
+    event: ENDING
+  text: "You decide it's been quite a day and promptly go home. Life is good."
+End9:
+  spcial:
+    event: ENDING
+    points: -200
+  text: "Unfortunately you answered wrong and got spaced. Too bad ET isn't around to save you"
+ExploreTogether:
+  conditions:
+    -
+      condition: "ExploreTogether & ExploreTogether"
+      next: City1
+      points: 100
+      text: "You and your friend are hitting it off pretty well! Gain some extra points"
+    -
+      condition: "ExploreTogether & ExploreAlone"
+      next: MysteryMan
+      text: "Darn, it looks like the other student isn't interested with hanging out with you. Guess you'll have to continue alone. Hopefully there aren't any monsters lurking around."
+  status: single
+Ferris:
+  choice:
+    -
+      next: ChatWithFerris
+      points: 200
+      text: "Perhaps you could squeeze in time for a 5 minute chat."
+    -
+      next: Aunt1
+      points: 100
+      text: "Nah, you don't talk to strangers. Actually, your aunt's apartment is right down the street. You decide to visit her instead."
+  special:
+    event: "Ferris' face pops up"
+    result: "display image"
+  status: single
+  text: "Who is this strange kid?? He says he's lonely and wants someone to chat with. He seems harmless, but you're a bit nervous about talking to strangers . . ."
+FightInigo:
+  conditions:
+    -
+      condition: "Runaway & FightHim2"
+      next: Intersection1
+      special:
+        event: "being a good citizen"
+        points: 300
+      status: single
+      text: "Wow what a coward! You came to the other person's aid and fought Inigo, yet the other player ran away without even saying thanks!"
+    -
+      condition: "FightHim1 & FightHim2"
+      next: Intersection2
+      status: together
+      text: "The two of you make the Dream Team and defeat Inigo in no time!"
+FoodPrize:
+  next: End8
+  special:
+    event: trivia
+    points: 1400
+  status: single
+  text: "If you can answer this question correctly, you're set for life, point-wise!"
+FreddyNightmare:
+  choice:
+    -
+      next: BefriendFreddy1
+      points: 100
+      text: "Maybe Freddy is just misunderstood. Perhaps he would't be so terrible if he had a friend."
+    -
+      next: End5
+      points: -200
+      text: "Luckily, you're an expert in Dream Kong Fu, and you decide to test out your skills now!"
+  special:
+    event: "Freddy stalks your dreams"
+    result: "pic pops up"
+  status: single
+  text: "As you're drifting off to sleep, a very unwelcome character materializes in your dream."
+FreddyNightmare2:
+  choice:
+    -
+      next: BefriendFreddy2
+      points: -100
+      text: "You're not a quitter! You're determined to at least try to befriend Freddy one more time, even if it means losing a little extra sleep."
+    -
+      next: End5
+      points: 0
+      text: "Freddy clearly had no interest with being friends. You decide to fight him this time! Maybe sharpen your dream fighting skills while you're at it."
+  status: single
+  text: "It's the same dream again: dark streets, you're by yourself, and you hear footsteps echoing off the brick buildings . . ."
+Halal:
+  conditions:
+    -
+      condition: "Halal & Halal"
+      next: End7
+      text: "You both enjoy a delicious meal. However, as you're walking away from the truck, you run into your aunt."
+    -
+      condition: "Halal & ShakeShack"
+      next: FoodPrize
+      text: "Turns out there's a special event going on at the Halal food truck! They're offerig a grand prize of 1400 points to anyone who answers this question correctly"
+HelpInigo:
+  next: Intersection1
+  special:
+    event: trivia
+    points: 300
+  status: single
+  text: "It turns out the mysterious man is actually Inigo Montoya and he is oh so grateful for your help. As a token of thanks, he directs you to the next intersection and even offers you bonus points if you answer the question correctly."
+HelpInigo2:
+  conditions:
+    -
+      condition: "HelpIni & HelpIni"
+      next: Intersection2
+      text: "Turns out the mysteirous man is Inigo Montoya and he's grateful for your help! As a token of thanks, he's giving you both some bonus points. However, it's getting pretty dark and you should probably go home soon."
+    -
+      condition: "HelpIni & IgnoreIni"
+      next: PleaseAgree
+  status: together
+IgnoreInigo:
+  choice:
+    -
+      goto: End1
+      points: -300
+      text: "Well, you haven't been taking MMA classes for nothing. It's a FIGHT!"
+    -
+      next: Intersection1
+      points: -200
+      text: "You're a friggin' track star, and there's no better time to test out your skills than when getting chased by a crazy sword-swinging dude through the streets of Philly."
+    -
+      action: help2
+      fallback: End2
+      helper: InigoSpecialResponder
+      next: InigoSpecialScreamer
+      points: -400
+      text: "Yikes, you could really use some backup. Maybe if you screamed for help someone would come?"
+  special:
+    event: "pop up pic/gif of Inigo"
+    points: 0
+  status: single
+  text: "Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup."
+IgnoreInigo2:
+  conditions:
+    -
+      condition: "HelpIni & IgnoreIni"
+      next: PleaseAgree
+    -
+      condition: "IgnoreIni & IgnoreIni"
+      next: Intersection2
+      text: "Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup. He challenges you and your partner to a duel. The battle was long and furious, but eventually you defeat Inigo and escape."
+  status: together
+InigoSpecialResponder:
+  choice:
+    -
+      name: Ignore
+      points: -100
+      return: 1
+      text: "LOL No. You book it out of there. You don't plan on facing a crazy dude with a sword."
+    -
+      name: FightHim2
+      next: FightInigo
+      points: -200
+      text: "Of course! You love being the hero."
+  status: single
+  text: "Hey! It's that kid from earlier--should you go help him/her out?"
+  with: InigoSpecialScreamer
+InigoSpecialScreamer:
+  choice:
+    -
+      name: Runaway
+      next: RunFromInigo
+      points: -200
+      text: "Why isn't the other person running to your aid?? Perhaps you should run away from Inigo now!"
+    -
+      name: FightHim1
+      next: FightInigo
+      points: -200
+      text: "The other person sure is taking their sweet time in coming over, in the mean time, you decide to strike Inigo first before he can chop off your head!"
+  status: single
+  text: "Hey! It's that kid you saw from earlier! What should you do?"
+  with: InigoSpecialResponder
+Intersection1:
+  choice:
+    -
+      action: "You live on Elm street. Sure, some people are a bit superstitious about the street's name, but you're not afraid of lil' Freddy Krueger."
+      next: FreddyNightmare
+      points: 1300
+    -
+      next: NewYork
+      points: 700
+      text: "You're secretly a billionaire and take your private helicoptor back home to New York City."
+  special:
+    event: trivia
+    points: 100
+  status: single
+  text: "It's getting pretty dark now and you kind of want to go home. Where is home?"
+Intersection2:
+  choice:
+    -
+      name: Walnut
+      next: Walnut
+      text: "Walnut street"
+    -
+      name: 34th
+      next: 34th
+      text: "34th street"
+  status: together
+  text: "You come across an intersection. Which street would you like to take?"
+Jaws:
+  next: End15
+  special:
+    event: "display picture of jaws"
+    result: "show picture"
+  status: single
+  text: "Yikes. Shoulda stayed awawy from the waters after all."
+LeftWay:
+  conditions:
+    -
+      condition: "LeftWay & LeftWay"
+      next: MysteryMan2
+      status: together
+      text: "Awesome! You've chosen to stick together, something you're glad of as you round the corner and find . . ."
+    -
+      condition: "LeftWay & RightWay"
+      next: Intersection1
+      status: single
+      text: "Oh dear, it looks like you want to go different ways."
+LightSide:
+  choice:
+    -
+      next: PorgRescue
+      points: -200
+      text: "You pick up the porg and run!"
+    -
+      next: End17
+      text: "You'll rather not get between Chewie and his meal. You stay out of this."
+  special:
+    event: "display pic of chewie eating porgs"
+    result: "display pic"
+  status: single
+  text: "You land on an island and notice a porg running for its life, chased by Chewie. Chewie looks pretty hungry. What do you do?"
+Mansion:
+  conditions:
+    -
+      condition: "TakeChoc & Mansion"
+      next: Mansion1
+      status: single
+      text: "This mansion sure is creeeeepy! You seem to hear a haunting song in the background . . ."
+    -
+      condition: "Mansion & Mansion"
+      next: Mansion2
+      status: together
+      text: "This mansion sure is creeeeepy! You seem to hear a haunting song in the background . . ."
+MysteryMan:
+  choice:
+    -
+      next: HelpInigo
+      points: -100
+      special:
+        event: trivia
+        points: 200
+      text: "You have time to kill, might as well help out a soul!"
+    -
+      action: "Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him."
+      next: IgnoreInigo
+      points: 0
+  status: single
+  text: "A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . ."
+MysteryMan2:
+  choice:
+    -
+      name: HelpIni
+      next: HelpInigo2
+      points: -100
+      text: "You're in a generous mood and decide to help out this man."
+    -
+      name: IgnoreIni
+      next: IgnoreInigo2
+      points: 0
+      text: "Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him."
+  fallback: PleaseAgree
+  status: together
+  text: "A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . . You and your friend must make a choice together, help the man or not?"
+NewYork:
+  choice:
+    -
+      next: Aunt1
+      points: 100
+      text: "Oh hell no! Better play it safe than sorry. You remember your aunt lives in NYC as well. Perhaps now would be a good time to visit her."
+    -
+      next: Ferris
+      points: 0
+      text: "Curiosity might've killed the cat but satisfaction brought it back. You go check out the noise."
+  status: single
+  text: "As you're walking down Broadway, you hear a strange sound. Do you go investigate?"
+PleaseAgree:
+  next: MysteryMan2
+  points: -100
+  status: together
+  text: "Looks like you and your partner can't decide whether or not to both ignore or both help Inigo. Perhaps you need to try communicating clearer? Let's try this again."
+PorgRescue:
+  choice:
+    -
+      next: End18
+      text: "2001"
+    -
+      next: End18
+      text: "2003"
+    -
+      next: PorgThanks
+      text: "2004"
+  status: single
+  text: "there's a broken spacecraft in your way. answer correctly in order to successfully navgiate around it. Which year did the first episode of Battlestar Galactica air?"
+PorgThanks:
+  next: End19
+  status: single
+  text: "You successfully outrun Chewie! Over the crest of the hill, you stumble into the porg flock. They're touched by your kindness and adopt you as one of their own."
+Porgs:
+  next: Smurfs
+  special:
+    event: trivia
+    points: 100
+  status: together
+  text: "Who would've ever thought you would stumble across porgs in Philly?? You chase the porgs into a forest."
+RightWay:
+  conditions:
+    -
+      condition: "RightWay & RightWay"
+      next: Intersection2
+      status: together
+      text: "Awesome! You've chosen to stick together."
+    -
+      condition: "RightWay & LeftWay"
+      next: MysteryMan
+      status: single
+      text: "Aw shucks, looks like you guys split up! It's falling dark fast, best hurry home now . . ."
+Rocket:
+  choice:
+    -
+      next: Aunt1
+      points: 200
+      text: "It's probably an alien trap. You don't want to get abducted by some weird ET creatures, so you decide to visit your aunt who lives nearby instead."
+    -
+      next: Space
+      points: 400
+      text: "You've always wanted to blast off into space, even if it means the chance of getting sucked into a black hole. You hop onto the rocket"
+  status: single
+  text: "you can hardly believe your eyes. It's the rocket from 2001 Space Odyssey!"
+RocketTrivia1:
+  choice:
+    -
+      next: End9
+      points: 200
+      text: "LT Thompkins"
+    -
+      next: RocketTrivia2
+      points: 300
+      text: "HAL 9000"
+    -
+      next: End9
+      points: 300
+      text: "LUNA 1500"
+  status: single
+  text: "As the sole person on board, there is no room for error. Unfortunately, parts of the notebook, which is actually a manual, are missing. You must fill in the blanks by answering the questions. Which is a character from 2001 Space Odyssey?"
+RocketTrivia2:
+  choice:
+    -
+      next: RocketTrivia3
+      points: 100
+      text: "1982"
+    -
+      next: End9
+      points: 100
+      text: "1987"
+    -
+      next: End9
+      points: 500
+      text: "1989"
+  status: single
+  text: "Which year was the movie ET released?"
+RocketTrivia3:
+  choice:
+    -
+      next: End9
+      points: 300
+      text: "a potato"
+    -
+      next: End9
+      points: 400
+      text: "a manatee"
+    -
+      next: End10
+      points: 500
+      text: "Carl Sandburg"
+  status: single
+  text: "Wow, you're a space nerd! Answer the last question and plant your personal flag on the moon! What was ET's face modeled after?"
+RunFromInigo:
+  conditions:
+    - condition: "Runaway & FightHim2"
+      next: Intersection1
+      status: single
+      text: "Wow okay looks like that other person is fighting Inigo for you now . . . in the meantime, you'll just quietly slip away . . ."
+    - condition: "Runaway & Ignore"
+      next: End3
+      status: single
+      text: "Wait, is that person walking away from you????"
+
+ShakeShack:
+  conditions:
+    -
+      condition: "Halal & ShakeShack"
+      next: FoodPrize
+      text: "Turns out there's a special event going on at the Shack! They're offerig a grand prize of 1400 points to anyone who answers this question correctly"
+    -
+      condition: "ShakeShack & ShakeSahck"
+      next: End7
+      text: "You both enjoy delicious burgers and shakes. However, as you're leaving, you run into your aunt."
+Smurfs:
+  choice:
+    -
+      name: TakeChoc
+      next: TakeChoc
+      points: 100
+      text: "Of course! You never turn down chocolate. Even if the smurfs seem kinda evil . . ."
+    -
+      name: Mansion
+      next: mansion
+      text: "you don't take candy from strangers. But the smurfs are very insistent...perhaps a bit too insistent. They chase you into a mansion."
+  status: together
+  text: "you chase the porgs into a dark forest inhabitated by smurfs. The smurfs offer you chocolate. Do you accept it?"
+Space:
+  choice:
+    -
+      next: ET
+      text: "you choose to open the rattling box"
+    -
+      next: RocketTrivia1
+      text: "you choose to read the notebook in hopes of gathering knowledge"
+  status: single
+  text: "The spaceship rumbles and suddenly blasts off! On the spaceship you find a notebook and a mysterious glowing box."
+SpookyPark:
+  next: Rocket
+  special:
+    event: trivia
+    points: 100
+  status: single
+  text: "The sun has set and you really wished that you still had your friend with you. As you're walking by a park, you notice a strange metal contraption."
+TakeChoc:
+  conditions:
+    -
+      condition: "TakeChoc & Mansion"
+      next: WonkaWorld1
+      text: "Wow! Looks like you a found golden ticket in your chocolate bar. You're teleported to Wonka's factory."
+    -
+      condition: "TakeChoc & TakeChoc"
+      next: WonkaWorld2
+      status: together
+      text: "Wow! Lookslike you both a found golden ticket in your chocolate bars. You're teleported to Wonka's factory."
+Talk:
+  choice:
+    -
+      name: ExploreAlone
+      next: ExploreAlone
+      points: 500
+      text: "You're a free spirit and prefer to move at your own pace. Continue on your own."
+    -
+      name: ExploreTogether
+      next: ExploreTogether
+      points: 200
+      text: "You've heard rumors of strange things happening on the streets. Perhaps it's better to take a buddy . . ."
+  status: single
+  text: "Looks like you're both going to the city! Do you want to explore the city together or separately?"
+Tunnel:
+  choice:
+    -
+      next: End13
+      text: "4"
+    -
+      next: End14
+      text: "3-5"
+    -
+      next: End14
+      text: "5"
+    -
+      next: End14
+      text: "3-4"
+  special:
+    event: "tetris block image"
+    result: "display pic"
+  status: single
+  text: "You're in the tunnels and the sound is deafening now . . . turns out it's a cave in! Tetris blocks are falling everywhere! Answer the question to escape. How many squares are in any tetris blocK?"
+Walnut:
+  conditions:
+    -
+      condition: "Walnut & Walnut"
+      next: Porgs
+      status: together
+      text: "You both chose to go down Walnut street! You're walkig past Rittenhouse Square when you notice . . ."
+    -
+      condition: "Walnut & 34th"
+      next: SpookyPark
+      status: single
+      text: "Welp. It looks like you wanted to go down different streets."
+WonkaWorld1:
+  choice:
+    -
+      name: LeftPath
+      next: ChocRiver
+      points: 300
+      text: "to the left"
+    -
+      name: RightPath
+      next: Tunnel
+      points: 500
+      text: "to the right, closer toward the sound"
+  status: single
+  text: "you hear a rumbling sound and the path diverges before you. where do you go?"
+WonkaWorld2:
+  next: End12
+  status: together
+  text: "both of you stumble into a bubble room. hungry, you indulge on the delicious candy . . ."
+start:
+  choice:
+    -
+      name: AnswerTrivia
+      next: AnswerTrivia
+      points: 200
+      text: "Who cares about the heat? Jurrassic Museum is pretty interesting. I'm going to stay and play some trivia"
+    -
+      name: BreakAway
+      next: BreakAway
+      points: 500
+      text: "The teacher is still droning on and on about something prehistoric. Dinosaurs are cool but only up until a certain point. Quick, the teacher isn't looking now, make a break for it!"
+  status: single
+  text: "You're on a fieldtrip at Jurassic Museum! It's been hours and the day's getting pretty hot. What do you want to do?"

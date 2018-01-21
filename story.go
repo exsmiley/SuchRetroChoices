@@ -14,6 +14,7 @@ import (
 type Condition struct {
     requirements []string
     next string
+    points int
 }
 
 type Choice struct {
@@ -21,11 +22,14 @@ type Choice struct {
     points int
     fallback string
     action string
+    text string
+    goback int
 }
 
 type Special struct {
     event string
-    result int
+    points int
+    result string
 }
 
 type Element struct {
@@ -54,6 +58,39 @@ func (story *Story) getStatus(storyId string) string {
 func (story *Story) needsToWait(storyId string) bool {
     el := story.elements[storyId]
     return !el.status || len(el.conditions) > 0
+}
+
+func (story *Story) triggersHelp(storyId string, action string) bool {
+    el := story.elements[storyId]
+    for _, choice := range el.choices {
+        if choice.text == action && choice.action == "help" {
+            return true
+        }
+    }
+    return false
+}
+
+func (story *Story) triggersForce(storyId string, action string) bool {
+    el := story.elements[storyId]
+    for _, choice := range el.choices {
+        if choice.text == action && choice.action == "force" {
+            return true
+        }
+    }
+    return false
+}
+
+// TODO future maybe filter by old actions
+func (story *Story) getActions(storyId string) []string {
+    el := story.elements[storyId]
+    actions := []string{}
+
+    if len(el.choices) > 0 {
+        for _, choice := range el.choices {
+            actions = append(actions, choice.text)
+        } 
+    }
+    return actions
 }
 
 func (story *Story) makeChoice(storyId string, action string) (string, int) {
@@ -109,6 +146,7 @@ func LoadStory() Story {
         el.name = k
         el.choices = []Choice{}
         el.conditions = []Condition{}
+        log.Println(val)
         for k2, val2 := range val {
             if k2 == "status" {
                 el.status = val2.(string) == "single"
@@ -121,17 +159,27 @@ func LoadStory() Story {
                     condition := Condition{}
                     v2 := v.(map[interface{}]interface{})
                     for k4, v5 := range v2 {
+                        log.Println(k4)
                         k42 := k4.(string)
-                        v52 := v5.(string)
-                        if k42 == "condition" {
-                            reqs := strings.Split(v52, "&")
-                            for i := range reqs {
-                                reqs[i] = strings.TrimSpace(reqs[i])
-                            }
-                            condition.requirements = reqs
-                        } else if k42 == "next" {
-                            condition.next = v52
-                        } 
+                        if k42 == "special" {
+                            continue
+                        }
+
+                        if k42 == "points" {
+                            v52 := v5.(int)
+                            condition.points = v52
+                        } else {    
+                            v52 := v5.(string)
+                            if k42 == "condition" {
+                                reqs := strings.Split(v52, "&")
+                                for i := range reqs {
+                                    reqs[i] = strings.TrimSpace(reqs[i])
+                                }
+                                condition.requirements = reqs
+                            } else if k42 == "next" {
+                                condition.next = v52
+                            } 
+                        }
                         
                     }
                     el.conditions = append(el.conditions, condition)
@@ -149,7 +197,11 @@ func LoadStory() Story {
                         if k42 == "points" {
                             v52 := v5.(int)
                             choice.points = v52
-                        } else {
+                        } else if k42 == "return" {
+                            v52 := v5.(int)
+                            choice.goback = v52
+                        } else if k42 != "special" {
+                            log.Println(k42)
                             v52 := v5.(string)
                             if k42 == "next" {
                                 choice.next = v52
@@ -157,6 +209,8 @@ func LoadStory() Story {
                                 choice.fallback = v52
                             } else if k42 == "action" {
                                 choice.action = v52
+                            } else if k42 == "text" {
+                                choice.text = v52
                             }
                         }
                         
@@ -173,10 +227,14 @@ func LoadStory() Story {
                     if k42 == "event" {
                         v52 := v5.(string)
                         special.event = v52
-                    } else {
+                    } else if k42 == "points" {
+                        log.Println(v5)
                         v52 := v5.(int)
+                        special.points = v52
+                    } else if k42 == "result" {
+                        v52 := v5.(string)
                         special.result = v52
-                    }
+                    } 
                 }
                 el.special = special
             }

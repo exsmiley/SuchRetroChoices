@@ -22,6 +22,7 @@ Server => Client
     chat util (boolean): true if should display the chat
     room (object): data about who is hosting a game
     state (object): data about the current state of the game
+    help (object): data asking if the other player wants to help 
 */
 
 func handleStartup(gm *GameMaster, cookie string, so socketio.Socket) {
@@ -97,9 +98,10 @@ func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
 
             // need check if waiting
             if actOther == "help" {
-
+                so.BroadcastTo(gm.getGame(cookie).Id, "help", gm.getState(cookie))
+                // TODO put timeout and treat it as no
             } else if actOther == "force" {
-
+                so.BroadcastTo(gm.getGame(cookie).Id, "state", gm.getState(cookie))
             }
             // need check if force
             so.Emit("state", gm.getState(cookie))
