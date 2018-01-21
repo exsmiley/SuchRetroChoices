@@ -32,6 +32,9 @@
 <!--     <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="modal" data-target="#room-modal">Join Room</a>
     </li> -->
+    <li class="nav-item">
+      <a class="nav-link" id="quit-game-button" href="#">Quit Game</a>
+    </li>
   </ul>
   <div class="alert alert-warning alert-dismissable fade" id="why-alert" style="position:fixed;top:50px;left:30%;width:40%;">
     Why do you want to contact us over such a hacky hack? You must have something better to do with your life.
@@ -309,6 +312,10 @@
 
         $('#game').hide();
         $('#end').show();
+      });
+
+      $('#quit-game-button').click(function () {
+        socket.emit('quit');
       });
 
     });
