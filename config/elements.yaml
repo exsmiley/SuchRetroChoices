@@ -2,12 +2,10 @@ start:
   status: single
   text: You're on a fieldtrip at Jurassic Museum! It's been hours and the day's getting pretty hot. What do you want to do?
   choice:
-    - name: AnswerTrivia
-      next: AnswerTrivia
+    - next: AnswerTrivia
       points: 200
       text: Who cares about the heat? Jurrassic Museum is pretty interesting. I'm going to stay and play some trivia
-    - name: BreakAway
-      next: BreakAway
+    - next: BreakAway
       points: 500
       text: The teacher is still droning on and on about something prehistoric. Dinosaurs are cool but only up until a certain point. Quick, the teacher isn't looking now, make a break for it!
 
@@ -30,507 +28,55 @@ AnotherDitcher:
   status: single
   text: Hey, looks like there is another kid who decided to ditch the tour. What do you want to do?
   choice:
-    - name: Talk
+    - name: A1
       next: Talk
       points: 100
       text: go talk to the other student
-      action: help1
+      action: help
       fallback: MysteryMan
-    -
+    - name: A2
       next: MysteryMan
       points: 300
       text: walk away and continue on your own to city
 
 Talk:
   status: single
-  text: Looks like you're both going to the city! Do you want to explore the city together or separately?
-  choice:
-    - name: ExploreAlone
-      next: ExploreAlone
-      points: 500
-      text: You're a free spirit and prefer to move at your own pace. Continue on your own.
-    - name: ExploreTogether
-      next: ExploreTogether
-      points: 200
-      text: You've heard rumors of strange things happening on the streets. Perhaps it's better to take a buddy . . .
 
-ExploreTogether:
-  status: single
-  conditions:
-    - condition: ExploreTogether & ExploreTogether
-      text: You and your friend are hitting it off pretty well! Gain some extra points
-      points: 100
-      next: City1
-    - condition: ExploreTogether & ExploreAlone
-      text: Darn, it looks like the other student isn't interested with hanging out with you. Guess you'll have to continue alone. Hopefully there aren't any monsters lurking around.
-      next: MysteryMan
 
-City1:
-  status: together
-  text: Shadows creep along the sidewalks, and even the wind seems malicious as it whips through the streets. You're sure glad you have a friend with you. However, you've reached an intersection. Do you want to go left or right?
-  Choice:
-    - name: RightWay
-      points: 400
-      next: RightWay
-    - name: LeftWay
-      points: 300
-      next: LeftWay
-
-RightWay:
-  conditions:
-    -condition: RightWay & RightWay
-      status: together
-      text: Awesome! You've chosen to stick together.
-      special:
-        event: trivia
-        result: 100
-      next: Intersection2
-    -condition: RightWay & LeftWay
-      status: single
-      text: Aw shucks, looks like you guys split up! It's falling dark fast, best hurry home now . . .
-      next: MysteryMan
-
-LeftWay:
-  conditions:
-    - condition: LeftWay & LeftWay
-      status: together
-      text: Awesome! You've chosen to stick together, something you're glad of as you round the corner and find . . .
-      next: MysteryMan2
-    - condition: LeftWay & RightWay
-      status: single
-      text: Oh dear, it looks like you want to go different ways.
-      next: Intersection1
 
 
 MysteryMan:
   status: single
   text: A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . .
   choice:
-    -
+    - next: 8a
       points: -100
-      text: You have time to kill, might as well help out a soul!
-      special:
-        event: trivia
-        result: 200
-      next: HelpInigo
-    -
+      action: You have time to kill, might as well help out a soul!
+    - next: 9a
       points: 0
       action: Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him.
-      next: IgnoreInigo
 
-HelpInigo:
+8a:
   status: single
   text: It turns out the mysterious man is actually Inigo Montoya and he is oh so grateful for your help. As a token of thanks, he directs you to the next intersection and even offers you bonus points if you answer the question correctly.
   special:
     event: trivia
     result: 300
-  next: Intersection1
-
-IgnoreInigo:
-  status: single
-  text: Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup.
-  special:
-    event: pop up pic/gif of Inigo
-    result: 0
-  choice:
-    -
-      points: -300
-      text: Well, you haven't been taking MMA classes for nothing. It's a FIGHT!
-      goto: End1
-    -
-      points: -200
-      text: You're a friggin' track star, and there's no better time to test out your skills than when getting chased by a crazy sword-swinging dude through the streets of Philly.
-      next: Intersection1
-    -
-      action: help2
-      fallback: End2
-      points: -400
-      text: Yikes, you could really use some backup. Maybe if you screamed for help someone would come?
-      next: InigoSpecialScreamer
-      helper: InigoSpecialResponder
-
-InigoSpecialScreamer:
-  status: single
-  with: InigoSpecialResponder
-  text: Hey! It's that kid you saw from earlier! What should you do?
-  choice:
-    - name: Runaway
-      points: -200
-      text: Why isn't the other person running to your aid?? Perhaps you should run away from Inigo now!
-      next: RunFromInigo
-
-    - name: FightHim1
-      points: -200
-      text: The other person sure is taking their sweet time in coming over, in the mean time, you decide to strike Inigo first before he can chop off your head!
-      next: FightInigo
-
-InigoSpecialResponder:
-  status: single
-  with: InigoSpecialScreamer
-  text: Hey! It's that kid from earlier--should you go help him/her out?
-  choice:
-    - name: Ignore
-      points: -100
-      text: LOL No. You book it out of there. You don't plan on facing a crazy dude with a sword.
-      return: 1
-    - name: FightHim2
-      points: -200
-      text: Of course! You love being the hero.
-      next: FightInigo
-
-RunFromInigo:
-  conditions:
-    - condition: Runaway & FightHim2
-      status: single
-      text: Wow okay looks like that other person is fighting Inigo for you now . . . in the meantime, you'll just quietly slip away . . .
-      next: Intersection1
-    - condition: Runaway & Ignore
-      status: single
-      text: Wait, is that person walking away from you????
-      next: End3
+  action: go to 12
 
 
-FightInigo:
-  conditions:
-    - condition: Runaway & FightHim2
-      status: single
-      text: Wow what a coward! You came to the other person's aid and fought Inigo, yet the other player ran away without even saying thanks!
-      special:
-        event: being a good citizen
-        result: 300
-      next: Intersection1
-    - condition: FightHim1 & FightHim2
-      status: together
-      text: The two of you make the Dream Team and defeat Inigo in no time!
-      next: Intersection2
+
+
+
+
+
+
+
+
 
 
 End1:
   text: Alas, it appears that you've severely understimated the skills of a brooding swashbuckler. Inigo kills you (even though you swear you didn't kill his father). Perhaps if you might've survived if you had someone else with you . . .
-  special: ENDING
-
-End2:
-  text: Well, it looks like either you didn't scream loud enough or people just aren't very friendly because nobody runs to your aid. Inigo skewers you despite you protesting that you didn't kill his father.
-  special: ENDING
-
-End3:
-  text: Well! How rude of the other person to walk away from you even when you clearly needed help! Unfortunately, Inigo chases you down.
-  special: ENDING
-
-MysteryMan2:
-  status: together
-  text: A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . . You and your friend must make a choice together: help the man or not?
-  choice:
-    A:
-      points: -100
-      text: You're in a generous mood and decide to help out this man.
-      next: HelpInigo2
-    B:
-      points: 0
-      text: Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him.
-      next: IgnoreInigo2
-  fallback: PleaseAgree
-
-HelpInigo2:
-  status: together
-  conditions:
-    - condition: A & A
-    text: Turns out the mysteirous man is Inigo Montoya and he's grateful for your help! As a token of thanks, he's giving you both some bonus points. However, it's getting pretty dark and you should probably go home soon.
-    special:
-      event: trivia
-      result: 100
-    next: Intersection2
-    - condition: A & B
-    next: PleaseAgree
-
-IgnoreInigo2:
-  status: together
-  conditions:
-    - condition: A & B
-    next: PleaseAgree
-    - condition: B & B
-    text: Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup. He challenges you and your partner to a duel. The battle was long and furious, but eventually you defeat Inigo and escape.
-    special:
-      event: fight
-      result: -200
-      next: Intersection2
-
-PleaseAgree:
-  status: together
-  text: Looks like you and your partner can't decide whether or not to both ignore or both help Inigo. Perhaps you need to try communicating clearer? Let's try this again.
-  points: -100
-  next: MysteryMan2
-
-Intersection1:
-  status: single
   special:
-    event: trivia
-    result: 100
-  text: It's getting pretty dark now and you kind of want to go home. Where is home?
-  choice:
-    -
-      points: 1300
-      action: You live on Elm street. Sure, some people are a bit superstitious about the street's name, but you're not afraid of lil' Freddy Krueger.
-      next: FreddyNightmare
-    -
-      points: 700
-      text: You're secretly a billionaire and take your private helicoptor back home to New York City.
-      next: NewYork
-
-NewYork:
-  status: single
-  text: As you're walking down Broadway, you hear a strange sound. Do you go investigate?
-  choice:
-    -
-      points: 100
-      text: Oh hell no! Better play it safe than sorry. You remember your aunt lives in NYC as well. Perhaps now would be a good time to visit her.
-      next: Aunt1
-    -
-      points: 0
-      text: Curiosity might've killed the cat but satisfaction brought it back. You go check out the noise.
-      next: Ferris
-
-Ferris:
-  status: single
-  special:
-    event: Ferris' face pops up
-    result: display image
-  text: Who is this strange kid?? He says he's lonely and wants someone to chat with. He seems harmless, but you're a bit nervous about talking to strangers . . .
-  choice:
-    -
-      points: 200
-      text: Perhaps you could squeeze in time for a 5 minute chat.
-      next: ChatWithFerris
-    -
-      points: 100
-      text: Nah, you don't talk to strangers. Actually, your aunt's apartment is right down the street. You decide to visit her instead.
-      next: Aunt1
-
-ChatWithFerris:
-  status: single
-  text: Ferris is so glad you decided to talk with him for a bit! He even offers you some bonus points if you can answer this question correctly!
-  special:
-    event: trivia
-    result: 200
-  next: Aunt1
-
-
-Aunt1:
-  status: single
-  text: Your aunt isn't too happy that you're skipping school, even if it's for a field trip. However, she's also prone to bribery, and perhaps if you bribe her with chocolate she won't send you back to school.
-  choice:
-    -
-      points: -300
-      text: you buy some very nice chocolate for her and she lets your behaviour slide. in fact, she even drops you off at . . .
-      next: ChocRiver
-    -
-      points: 0
-      text: no chocolate is worth 300 points.
-      next: End4
-
-End4:
-  text: on a second thought, perhaps that field trip wasn't that bad. you decide to go back with the class and call it a day.
-  special: ENDING
-
-
-FreddyNightmare:
-  status: single
-  text: As you're drifting off to sleep, a very unwelcome character materializes in your dream.
-  special:
-    event: Freddy stalks your dreams
-    result: pic pops up
-  choice:
-    -
-      points: 100
-      text: Maybe Freddy is just misunderstood. Perhaps he would't be so terrible if he had a friend.
-      next: BefriendFreddy1
-    -
-      points: -200
-      text: Luckily, you're an expert in Dream Kong Fu, and you decide to test out your skills now!
-      next: End5
-
-End5:
-  text: You become incredibly skilled with lucid dreaming from battling Freddy and now become a Dream Guardian, protecting the citizens of Elm Street safe from Freddy!
-  special: ENDING
-
-BefriendFreddy1:
-  status: single
-  text: Freddy seems confused with your attempts of friendliness, and tries to attack you. You wake up covered in cold sweat.
-  special:
-    event: Freddy chases you through your dreams:
-    result: -400
-  next: FreddyNightmare2
-
-FreddyNightmare2:
-  status: single
-  text: It's the same dream again: dark streets, you're by yourself, and you hear footsteps echoing off the brick buildings . . .
-  choice:
-    -
-      points: -100
-      text: You're not a quitter! You're determined to at least try to befriend Freddy one more time, even if it means losing a little extra sleep.
-      next: BefriendFreddy2
-    -
-      points: 0
-      text: Freddy clearly had no interest with being friends. You decide to fight him this time! Maybe sharpen your dream fighting skills while you're at it.
-      next: End5
-
-BefriendFreddy2:
-  status: single
-  text: At first it looks like Freddy might try to attack you again like last time. But you're patient and it pays off.
-  special:
-    event: You befriend Freddy
-    result: 800
-  next: End6
-
-End6:
-  text: You and Freddy become BFFs, and you even gain Freddy's ability to walk inot other people's dreams! Of course, how you choose to use that power is up to you....
-  special: ENDING
-
-
-Intersection2:
-  status: together
-  text: You come across an intersection. Which street would you like to take?
-  choice:
-    - name: Walnut
-      text: Walnut street
-      next: Walnut
-    - name: 34th
-      text: 34th street
-      next: 34th
-
-Walnut:
-  conditions:
-    - condition: Walnut & Walnut
-    status: together
-    text: You both chose to go down Walnut street! You're walkig past Rittenhouse Square when you notice . . .
-    next: Porgs
-    - condition: Walnut & 34th
-    status: single
-    text: Welp. It looks like you wanted to go down different streets.
-    next: SpookyPark
-
-34th:
-  conditions:
-    - condition: 34th & 34th
-    status: together
-    text: You both chose to go down 34th Street! You're growing hungry, where do you want to eat?
-    next: EatingPlace
-    - condition 34th & Walnut
-    status: single
-    text: Welp. It looks like you wanted to down different streets.
-    next: SpookyPark
-
-EatingPlace:
-  status: together
-  text: There's a Shake Shack and a Halal food truck. Where do you want to eat?
-  choice:
-    - name: Halal
-    point: -100
-    next: Halal
-
-    - name: ShakeShack
-    point: -200
-    next: ShakeShack
-
-Halal:
-  conditions:
-    - condition: Halal & Halal
-    status: together
-
-
-SpookyPark:
-  status: single
-  text: The sun has set and you really wished that you still had your friend with you. As you're walking by a park, you notice a strange metal contraption.
-  special:
-    event: trivia
-    result: 100
-  next: Rocket
-
-Rocket:
-  status: single
-  text: you can hardly believe your eyes. It's the rocket from 2001 Space Odyssey!
-    choice:
-      -
-        points: 200
-        text: It's probably an alien trap. You don't want to get abducted by some weird ET creatures, so you decide to visit your aunt who lives nearby instead.
-        next: Aunt1
-      -
-        points: 400
-        text: You've always wanted to blast off into space, even if it means the chance of getting sucked into a black hole. You hop onto the rocket
-        next: Space
-
-Porgs:
-  status: together
-  special:
-    event: trivia
-    result: 100
-  text: Who would've ever thought you would stumble across porgs in Philly?? You chase the porgs into a forest.
-  next: Smurfs
-
-Smurfs:
-  status: together
-  text: you chase the porgs into a dark forest inhabitated by smurfs. The smurfs offer you chocolate. Do you accept it?
-  choice:
-    - name: TakeChoc
-    point: 100
-    text: Of course! You never turn down chocolate. Even if the smurfs seem kinda evil . . .
-    next: TakeChoc
-    -name: Mansion
-    text: you don't take candy from strangers. But the smurfs are very insistent...perhaps a bit too insistent. They chase you into a mansion.
-    next: mansion
-
-TakeChoc:
-  conditions:
-    - condition: TakeChoc & Mansion
-    status: single
-    text: Wow! Looks like you a found golden ticket in your chocolate bar. You're teleported to Wonka's factory.
-    special:
-      event: trivia
-      result: 100
-    next: WonkaWorld1
-    - condition: TakeChoc & TakeChoc
-    status: together
-    text: Wow! Lookslike you both a found golden ticket in your chocolate bars. You're teleported to Wonka's factory.
-    special:
-      event: trivia
-      result: 300
-    next: WonkaWorld2
-
-Mansion:
-  conditions:
-    - condition: TakeChoc & Mansion
-    status: single
-    text: This mansion sure is creeeeepy! You seem to hear a haunting song in the background . . .
-    next: Mansion1
-    - condition: Mansion & Mansion
-    status: together
-    text: This mansion sure is creeeeepy! You seem to hear a haunting song in the background . . .
-    next: Mansion2
-
-
-
-
-
-
-
-
-15:
-  status: together
-  text: You're nearing the end of Walnut street and now must decide whether you want to split from your friend or continue walking down togehter.
-  choice:
-    split:
-      conditions:
-        -condition: split & split
-        goto: 16
-        -condition: split & stay
-        goto: 16
-    stay:
-      conditions:
-        -condition: split & stay
-        text: shucks, looks like your friend ditched you anyway
-        goto: 16
-        -condition: stay & stay
-        goto: willy wonka
-
-16:
-  status: single
+    event: ENDING
+    result: 0

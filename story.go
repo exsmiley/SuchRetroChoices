@@ -30,7 +30,7 @@ type Special struct {
 
 type Element struct {
     name string
-    status bool
+    status bool // true if single
     text string
     special Special
     choices []Choice
@@ -43,10 +43,47 @@ type Story struct {
 }
 
 
+func (story *Story) getText(storyId string) string {
+    return story.elements[storyId].text
+}
+
+func (story *Story) getStatus(storyId string) string {
+    return story.elements[storyId].text
+}
+
+func (story *Story) needsToWait(storyId string) bool {
+    el := story.elements[storyId]
+    return !el.status || len(el.conditions) > 0
+}
+
+func (story *Story) makeChoice(storyId string, action string) (string, int) {
+    el := story.elements[storyId]
+    for _, choice := range el.choices {
+        if choice.action == action {
+            return choice.next, choice.points
+        }
+    }
+    return "", 0
+}
+
+func (story *Story) checkConditions(storyId string, action1 string, action2 string) string {
+    el := story.elements[storyId]
+    for _, cond := range el.conditions {
+        if (cond.requirements[0] == action1 && cond.requirements[1] == action2) || ( cond.requirements[1] == action1 && cond.requirements[0] == action2) {
+            return cond.next
+        }
+    }
+    return ""
+}
+
 func (story *Story) hasEnded(storyId string) bool {
-    // path := story.paths[storyId]
-    // return len(path.normal) == 0 && len(path.help) == 0 && len(path.force) == 0
-    return true
+    el := story.elements[storyId]
+
+    if el.special.event == "ENDING" {
+        return true
+    }
+
+    return len(el.choices) == 0 && len(el.conditions) == 0 && el.special.event == ""
 }
 
 
@@ -74,9 +111,9 @@ func LoadStory() Story {
         el.conditions = []Condition{}
         for k2, val2 := range val {
             if k2 == "status" {
-                // el.together = val2.(string) != "single"
+                el.status = val2.(string) == "single"
             } else if k2 == "text" {
-                // el.text = val2.(string)
+                el.text = val2.(string)
             } else if k2 == "conditions" {
                 
                 val22 := val2.([]interface{})
@@ -153,6 +190,8 @@ func LoadStory() Story {
     return story
 }
 
-func main() {
-    log.Println("Loaded Story:", LoadStory())
-}
+// func main() {
+//     story := LoadStory()
+//     log.Println(story)
+
+// }
