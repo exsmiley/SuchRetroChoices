@@ -103,6 +103,10 @@ func (gm *GameMaster) getRooms(playerCookie string) GameRooms {
         }
 
         hostName := gm.getName(hostId)
+        if hostName == "" {
+            continue
+        }
+
         room := GameRoom{hostId, hostName}
         grs.Rooms = append(grs.Rooms, room)
         hosts[hostId] = true

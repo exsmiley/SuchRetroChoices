@@ -26,32 +26,36 @@
     <li class="nav-item">
       <a class="nav-link" href="#" data-toggle="modal" data-target="#player-name-modal">Change Name</a>
     </li>
-    <li class="nav-item">
+<!--     <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="modal" data-target="#room-modal">Join Room</a>
-    </li>
+    </li> -->
   </ul>
 </nav>
 
 <body>
   <div class="grid-container">
 
-    <!-- <div id="room-select"></div> -->
-    
-    <div class="story">
-      <h3>Story</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
-        dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
-        aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
-        aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
-        Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
-      </p>
+    <div class="container" id="room-container">
+      <h3>Click a Player to Play With:</h3>
+      <div id="room-select">No rooms available! :(</div>
     </div>
-    <div class="choices">
-      <h3>Choices</h3>
-      <ul class="choices-list">
-        <li><a class="btn btn-light">Run!</a></li>
-        <li><a class="btn btn-light">Stand the ground!</a></li>
-      </ul>
+    <div id="game" style="display: none;">
+      <div class="story">
+        <h3>Story</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
+          dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
+          aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
+          aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
+          Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
+        </p>
+      </div>
+      <div class="choices">
+        <h3>Choices</h3>
+        <ul class="choices-list">
+          <li><a class="btn btn-light">Run!</a></li>
+          <li><a class="btn btn-light">Stand the ground!</a></li>
+        </ul>
+      </div>
 
     </div>
   </div>
@@ -85,7 +89,7 @@
     </div>
   </div>
 
-  <div class="modal" id="room-modal" tabindex="-1" role="dialog" data-keyboard="false">
+<!--   <div class="modal" id="room-modal" tabindex="-1" role="dialog" data-keyboard="false">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -99,7 +103,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -179,14 +183,21 @@
       // receive current room list
       socket.on('room', function (data) {
         rooms = data["Rooms"];
-        rooms.forEach(function (element) {
+
+        if(rooms.length > 0) {
+          rooms.forEach(function (element) {
           $('#room-select').html('');
           $('#room-select').append('<button class="room-button btn btn-primary" onClick="joinRoomFunc(this)" id="' + element["HostId"] +'">' + element["HostName"] + '</button>')
-        });
+          });
+        } else {
+          $('#room-select').html('No rooms available! :(');
+        }
+        
       });
 
       socket.on('state', function(data) {
-        $('#room-select').html('');
+        $("#game").show();
+        $('#room-container').hide();
         console.log(data)
       })
 
