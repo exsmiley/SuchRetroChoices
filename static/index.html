@@ -26,6 +26,9 @@
     <li class="nav-item">
       <a class="nav-link" href="#" data-toggle="modal" data-target="#player-name-modal">Change Name</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#room-modal">Join Room</a>
+    </li>
   </ul>
 </nav>
 
@@ -68,13 +71,29 @@
           <h5 class="modal-title">What's your name?</h5>
         </div>
         <div class="modal-body">
-          <input name="player-name" id="pn" type="text">
+          <input name="player-name" id="pn" type="text" required>
           <p>
             <span class="input-error invisible text-danger" id="name-input-error">You cannot save an empty name.</span>
           </p>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" id='namesave'>Save changes</button>
+          <button type="button" class="btn btn-primary" id='namesave'>Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="room-modal" tabindex="-1" role="dialog" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Pick a room</h5>
+        </div>
+        <div class="modal-body">
+          <div id="room-select"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id='joinroom'>Join</button>
         </div>
       </div>
     </div>
@@ -83,7 +102,6 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="/static/js/socket.io-1.3.7.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 
@@ -140,11 +158,23 @@
         console.log('got name:' + name);
         $('#pn').val(name)
       })
+
+      var rooms;
+      // receive current room list
       socket.on('room', function (data) {
-        console.log('room:' + JSON.stringify(data));
+        rooms = data["Rooms"];
+      });
+      $('#room-modal').on('shown.bs.modal', function () {
+        console.log(rooms);
+        $('#room-select').html('');
+        rooms.forEach(function (element) {
+          $('#room-select').append('<button class="room-button btn btn-primary">' + element["HostName"] + '</button>')
+        });
       });
     });
   </script>
+
+  <script src="/static/js/game.js"></script>
 
 </body>
 
