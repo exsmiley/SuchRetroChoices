@@ -54,6 +54,9 @@
   <div id="game" style="display: none;">
     <div class="story">
       <h3>Story</h3>
+      <section>
+        <img id="story-img" class="fade" src="">
+      </section>
       <section class="story-text">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
           dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
@@ -78,18 +81,20 @@
   </div>
 
   <div id="end" style="display: none;">
-      <div class="story">
-        <h3>Ending</h3>
-        <section id="end-text">
-        </section>
-      </div>
-      <div class="choices">
-        <h3>Score</h3>
-        <section id="end-score"
-        ></section>
-      </div>
-    
+    <div class="story">
+      <h3>Ending</h3>
+      <section>
+        <img id="end-img" class="fade" src="">
+      </section>
+      <section id="end-text">
+      </section>
     </div>
+    <div class="choices">
+      <h3>Score</h3>
+      <section id="end-score"></section>
+    </div>
+  
+  </div>
 
   <div class="msg-container bg-white">
     <ul id="messages"></ul>
@@ -247,12 +252,20 @@
         if(objectEquals(stateData, data)) {
           return
         } else if(!over) {
-          console.log(data);
           stateData = data
           var waiting = data["Waiting"];
+          var image = data["Image"];
           var text = data["Text"];
           var choices = data["Actions"];
           if (!waiting) {
+            if (typeof image === 'undefined') {
+              document.getElementById('story-img').src = "";
+              $('#story-img').removeClass('show');
+            } else {
+              document.getElementById('story-img').src = image;
+              $('#story-img').addClass('show');
+            }
+
             $('.story-text').html('');
             $('.story-text').append($('<p>').text(text));
             $('.choices-list').html('');
@@ -279,16 +292,24 @@
       });
 
       socket.on('end', function (data) {
-        over = true
+        over = true;
         var endText = data["Text"];
         var endImg = data["Image"];
         var endScore = data["Score"];
-        $('#end-text').text(endText);
-        $('#end-score').text(endScore);
+        document.getElementById('end-img').src = endImg;
+        if (typeof endImg === 'undefined') {
+          document.getElementById('end-img').src = "";
+          $('#end-img').removeClass('show');
+        } else {
+          document.getElementById('end-img').src = endImg;
+          $('#end-img').addClass('show');
+        }
+        $('#end-text').append($('<p>').text(endText));
+        $('#end-score').append($('<p>').text(endScore));
 
         $('#game').hide();
         $('#end').show();
-      })
+      });
 
     });
   </script>
