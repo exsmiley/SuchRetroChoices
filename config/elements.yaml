@@ -85,11 +85,11 @@ ChocRiver:
 City1:
   Choice:
     -
-      name: RightWay
+      text: RightWay
       next: RightWay
       points: 400
     -
-      name: LeftWay
+      text: LeftWay
       next: LeftWay
       points: 300
   status: together

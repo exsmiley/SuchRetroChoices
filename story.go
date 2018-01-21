@@ -36,6 +36,7 @@ type Element struct {
     name string
     status bool // true if single
     text string
+    next string
     special Special
     choices []Choice
     conditions []Condition
@@ -85,12 +86,12 @@ func (story *Story) getActions(storyId string, next string) []string {
     el := story.elements[storyId]
     actions := []string{}
 
-    if len(el.choices) > 0 {
+    if next != "" {
+        actions = append(actions, next)
+    } else if len(el.choices) > 0 {
         for _, choice := range el.choices {
             actions = append(actions, choice.text)
         } 
-    } else if next != "" {
-        actions = append(actions, next)
     }
     return actions
 }
@@ -98,15 +99,28 @@ func (story *Story) getActions(storyId string, next string) []string {
 func (story *Story) makeChoice(storyId string, action string) (string, int) {
     el := story.elements[storyId]
     for _, choice := range el.choices {
-        if choice.action == action {
+        if choice.text == action {
             return choice.next, choice.points
         }
     }
+
+    for _, condition := range el.conditions {
+        if condition.next == action {
+            return condition.next, condition.points
+        }
+    }
+
     return "", 0
 }
 
 func (story *Story) checkConditions(storyId string, action1 string, action2 string) string {
     el := story.elements[storyId]
+
+    // this means that it was not actually a conditional spot, just needed some unity
+    if len(el.conditions) == 0 {
+        return storyId
+    }
+
     for _, cond := range el.conditions {
         if (cond.requirements[0] == action1 && cond.requirements[1] == action2) || ( cond.requirements[1] == action1 && cond.requirements[0] == action2) {
             return cond.next
@@ -154,7 +168,9 @@ func LoadStory() Story {
                 el.status = val2.(string) == "single"
             } else if k2 == "text" {
                 el.text = val2.(string)
-            } else if k2 == "conditions" {
+            } else if k2 == "next" {
+                el.next = val2.(string)
+            }else if k2 == "conditions" {
                 
                 val22 := val2.([]interface{})
                 for _, v := range val22 {

@@ -41,6 +41,7 @@
     <div class="container" id="room-container">
       <h3>Click a Player to Play With:</h3>
       <div id="room-select">No rooms available! :(</div>
+
     <!-- <div id="room-select"></div> -->    
   </div>
 
@@ -119,6 +120,7 @@
 
   <script type="text/javascript">
     var socket = io();
+    var hasName = false;
 
     function joinRoomFunc(derp) {
         // console.log('I got triggered');
@@ -141,10 +143,9 @@
           console.log('trying to send ' + nameToSave);
           socket.emit('name', nameToSave);
           $('#player-name-modal').modal('hide');
+          hasName = true;
         }
       };
-
-      
 
       $('#namesave').click(sendName);
       $('#player-name-modal').keypress(function (k) {
@@ -183,14 +184,17 @@
       socket.on('name', function (name) {
         console.log('got name:' + name);
         $('#pn').val(name)
+        hasName = true;
       })
 
       var rooms;
       // receive current room list
       socket.on('room', function (data) {
-        rooms = data["Rooms"];
+        // rooms = data["Rooms"];
+        console.log(rooms, data, hasName, data['Rooms'].length)
 
-        if(rooms.length > 0) {
+        if(data["Rooms"].length > 0 && hasName && (!rooms || rooms != data["Rooms"])) {
+          rooms = data["Rooms"]
           rooms.forEach(function (element) {
           $('#room-select').html('');
           $('#room-select').append('<button class="room-button btn btn-primary" onClick="joinRoomFunc(this)" id="' + element["HostId"] +'">' + element["HostName"] + '</button>')
@@ -201,27 +205,38 @@
         
       });
 
-      socket.on('state', function(data) {
-        $("#game").show();
-        $('#room-container').hide();
-        console.log(data)
-      })
+      var stateData;
 
       socket.on('state', function (data) {
-        console.log(data);
-        var waiting = data["Waiting"];
-        var text = data["Text"];
-        var choices = data["Actions"];
-        $('.story-text').html('');
-        $('.story-text').append($('<p>').text(text));
-        $('.choices-list').html('');
-        choices.forEach(function (action) {
-          $('.choices-list')
-            .append($('<li>').text(action).addClass('action-item btn-warning'));
-        });
-        $('.action-item').click(function (e) {
-          socket.emit('action', e.target.textContent);
-        });
+        $("#game").show();
+        $('#room-container').hide();
+        if(stateData == data) {
+          return
+        } else {
+          console.log(data);
+          stateData = data
+          var waiting = data["Waiting"];
+          var text = data["Text"];
+          var choices = data["Actions"];
+          if(!waiting) {
+            $('.story-text').html('');
+            $('.story-text').append($('<p>').text(text));
+            $('.choices-list').html('');
+            choices.forEach(function (action) {
+              $('.choices-list')
+                .append($('<li>').text(action).addClass('action-item btn-warning'));
+            });
+            $('.action-item').click(function (e) {
+              socket.emit('action', e.target.textContent);
+            });
+          } else {
+            $('.story-text').html('');
+            $('.choices-list').html('');
+            $('.story-text').append($('<p>').text("You are waiting on the other player's actions..."));
+          }
+        }
+        
+        
       });
     });
   </script>

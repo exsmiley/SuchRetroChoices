@@ -57,7 +57,10 @@ func reloadGameRoom(gm *GameMaster, cookie string, so socketio.Socket) {
     log.Println("got here!")
     log.Println(cookie, gm.getState(cookie))
     // emit state information once in a game
-    so.Emit("state", gm.getState(cookie))
+    for gm.isInActiveGame(cookie) {
+        so.Emit("state", gm.getState(cookie))
+        time.Sleep(1000 * time.Millisecond)
+    }   
 }
 
 // appends the username to the message
@@ -93,7 +96,7 @@ func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
             // join new game that the player is in with the other player
             so.Join(gm.getGame(cookie).Id)
 
-            so.Emit("state", gm.getState(cookie))
+            // so.Emit("state", gm.getState(cookie))
         })
 
         so.On("action", func(action string) {

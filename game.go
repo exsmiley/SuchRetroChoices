@@ -1,7 +1,8 @@
 package main
 
 import (
-    // "log"
+    "log"
+    // "fmt"
 )
 
 type Player struct {
@@ -146,8 +147,12 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
     game := gm.games[gm.playerToGame[playerCookie]]
     lastState := states[len(states)-1]
 
+    log.Println(player, action, lastState)
+
     next, points := gm.story.makeChoice(lastState, action)
     player.score += points
+
+    log.Println("something", next, points)
 
     // handle if other player is waiting
     if game.waiting != "" {
@@ -157,25 +162,39 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
         otherNext := gm.story.checkConditions(otherLastState, otherLastState, next)
         otherPlayer.next = otherNext
 
-        nextNext := gm.story.checkConditions(lastState, lastState, otherLastState)
+        log.Println("other next", otherPlayer)
+
+        gm.games[gm.playerToGame[playerCookie]].players[otherCookie] = otherPlayer
+
+        nextNext := gm.story.checkConditions(next, next, otherLastState)
         player.next = nextNext
+        log.Println("other next2", nextNext)
+
         game.waiting = ""
+        
     } else if gm.story.needsToWait(next) {
         game.waiting = playerCookie
+
+        // TODO check other player first to see if they made an action?
     } else {
         player.next = ""
     }
-
 
     actionString := ""
     if gm.story.triggersHelp(lastState, action) {
         actionString = "help"
         game.waiting = playerCookie
+        gm.games[gm.playerToGame[playerCookie]] = game
     } else if gm.story.triggersForce(lastState, action) {
         actionString = "force"
     }
 
     player.states = append(states, next)
+
+    gm.games[gm.playerToGame[playerCookie]].players[playerCookie] = player
+    gm.games[gm.playerToGame[playerCookie]] = game
+    // log.Println("are they the same?", player, gm.getPlayer(playerCookie))
+
 
     return actionString
 }
@@ -189,9 +208,18 @@ func (gm *GameMaster) getState(playerCookie string) GameState {
     lastState := states[len(states)-1]
     waiting := game.waiting == playerCookie
 
+    // log.Println("Getting data from", player)
+
+
     actions := story.getActions(lastState, player.next)
     text := story.getText(lastState)
 
-    return GameState{waiting, text, "", actions}
+    // fmt.Println(game.waiting, playerCookie)
+
+    gs := GameState{waiting, text, "", actions}
+
+    // fmt.Println("sending", gs)
+
+    return gs
 }
 
