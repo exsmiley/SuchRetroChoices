@@ -26,7 +26,148 @@ AnotherDitcher:
   text: "Hey, looks like there is another kid who decided to ditch the tour. What do you want to do?"
 AnswerTrivia:
   status: single
-  text: "FILL WITH TRIVIA"
+  text: "Answer questions correctly in order to earn as many points as possible. Be warned though, answer incorrectly and you will lose points"
+  next: Question1A
+
+Question1A:
+  status: single
+  text: "What is the name of the island in which Jurassic Park takes place?"
+  choice:
+    -
+      next: Question1B
+      text: "Isla Nubla"
+      points: 300
+    -
+      next: Question1B
+      text: "Isla Dracona"
+      points: -100
+    -
+      next: Question1B
+      text: "Tahiki Island"
+      points: -100
+    -
+      next: MysteryMan
+      text: "You grow bored of the tour and decide to venture into the city instead"
+      points: 200
+
+Question1B:
+  status: single
+  text: "the correct answer is Isla Nubla"
+  next: Question2A
+
+Question2A:
+  status: single
+  text: "What is Jurassic Park's Tagline?"
+  choice:
+    -
+      next: Question2B
+      text: "75 million years in the making"
+      points: -100
+    -
+      next: Question2B
+      text: "65 million years in the making"
+      points: 200
+
+    -
+      next: Question2B
+      text: "70 million years in te making"
+      points: -100
+    -
+      next: MysteryMan
+      text: "You grow bored of the tour and decide to venture into the city instead"
+      points: 200
+
+Question2B:
+  status: single
+  text: "The correct answer is 65 million years in the making"
+  next: Question3A
+
+Question3A:
+  status: single
+  text: "What type of dinosaur does T-rex eat in the film?"
+  choice:
+    -
+      next: Question3B
+      text: "Galliminus"
+      points: 400
+    -
+      next: Question3B
+      text: "Another T-rex"
+      points: -100
+
+    -
+      next: Question3B
+      text: "Edmontasarous"
+      points: -100
+    -
+      next: MysteryMan
+      text: "You grow bored of the tour and decide to venture into the city instead"
+      points: 200
+
+Question3B:
+  status: single
+  text: "the correct answer is galliminus"
+  next: Question4A
+
+Question4A:
+  status: single
+  text: "Who composed the soundtrack to Jurassic Park"
+  choice:
+    -
+      next: Question4B
+      text: "Hans Zimmer"
+      points: -100
+    -
+      next: Question4B
+      text: "James Horner"
+      points: -100
+
+    -
+      next: Question4B
+      text: "John Williams"
+      points: 300
+    -
+      next: MysteryMan
+      text: "You grow bored of the tour and decide to venture into the city instead"
+      points: 200
+
+Question4B:
+  status: single
+  text: "the correct answer is John Williams"
+  next: Question5A
+
+Question5A:
+  status: single
+  text: "How minutes of screen time do the dinos have in the movie Jurassic Park?"
+  choice:
+    -
+      next: Question5B
+      text: "22 minutes"
+      points: -100
+    -
+      next: Question5B
+      text: "9 minutes"
+      points: -100
+
+    -
+      next: Question5B
+      text: "15 minutes"
+      points: 400
+
+Question5B:
+  status: single
+  text: "the correct answer is 15 minutes"
+  next: EndTrivia
+
+EndTrivia:
+  status: single
+  text: "congrats you have reached the end of the trivia game. how well did you do?"
+  special:
+    event: ENDING
+    points: 0
+
+
+
 Aunt1:
   choice:
     -
@@ -64,12 +205,34 @@ BreakAway:
   status: single
   text: "You're walking along when all of a sudden you see an unguaded exit and leave the park."
 ChatWithFerris:
-  next: Aunt1
-  special:
-    event: trivia
-    points: 200
+  next: FerrisTriviaQ
   status: single
   text: "Ferris is so glad you decided to talk with him for a bit! He even offers you some bonus points if you can answer this question correctly!"
+
+FerrisTriviaQ:
+  status: single
+  text: "What year was the movie Ferris Bueller's Day Off released in?"
+  choice:
+    -
+      next: FerrisTriviaA
+      text: "1985"
+      points: 0
+
+    -
+      next: FerrisTriviaA
+      text: "1986"
+      points: 100
+
+    -
+      next: FerrisTriviaA
+      text: "1987"
+      points: 0
+
+FerrisTriviaA:
+  status: single
+  text: "the correct answer was 1986. continue on to your aunt's"
+  next: Aunt1
+
 ChocRiver:
   choice:
     -
@@ -274,12 +437,35 @@ FightInigo:
       status: together
       text: "The two of you make the Dream Team and defeat Inigo in no time!"
 FoodPrize:
-  next: End8
-  special:
-    event: trivia
-    points: 1400
+  next: FoodTriviaQ
   status: single
   text: "If you can answer this question correctly, you're set for life, point-wise!"
+
+FoodTriviaQ:
+  status: single
+  text: "which decade was the Philly cheesesteak invented in?"
+  choice:
+    -
+      next: FoodTriviaA
+      text: "1880's"
+      points: 0
+
+    -
+      next: FoodTriviaA
+      text: "1940's"
+      points: 0
+
+    -
+      next: FoodTriviaA
+      text: "1930's"
+      points: 1400
+
+FoodTriviaA:
+  single: status
+  text: "the correct answer was 1930's"
+  next: End8
+
+
 FreddyNightmare:
   choice:
     -
@@ -318,12 +504,36 @@ Halal:
       next: FoodPrize
       text: "Turns out there's a special event going on at the Halal food truck! They're offerig a grand prize of 1400 points to anyone who answers this question correctly"
 HelpInigo:
-  next: Intersection1
-  special:
-    event: trivia
-    points: 300
+  next: InigoTriviaQ
   status: single
   text: "It turns out the mysterious man is actually Inigo Montoya and he is oh so grateful for your help. As a token of thanks, he directs you to the next intersection and even offers you bonus points if you answer the question correctly."
+
+InigoTriviaQ:
+  status: single
+  text: "Which of the following is NOT a line from The Princess Bride?"
+  choice:
+    -
+      next: InigoTriviaA
+      text: "They call it a Royale with cheese"
+      points: 200
+    -
+      next: InigoTriviaA
+      text: "Life is pain, Highness. Anyone who says differently is selling something"
+      points: 0
+    -
+      next: InigoTriviaA
+      text: "Have fun stomin' da castle!"
+      points: 0
+
+InigoTriviaA:
+  status: single
+  text: "the correct answer was 'They call it a Royale with cheese'"
+  next: Intersection1
+
+
+
+
+
 HelpInigo2:
   conditions:
     -
@@ -406,9 +616,6 @@ Intersection1:
       next: NewYork
       points: 700
       text: "You're secretly a billionaire and take your private helicoptor back home to New York City."
-  special:
-    event: trivia
-    points: 100
   status: single
   text: "It's getting pretty dark now and you kind of want to go home. Where is home?"
 Intersection2:
@@ -473,9 +680,6 @@ MysteryMan:
     -
       next: HelpInigo
       points: -100
-      special:
-        event: trivia
-        points: 200
       text: "You have time to kill, might as well help out a soul!"
     -
       text: "Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him."
@@ -534,9 +738,6 @@ PorgThanks:
   text: "You successfully outrun Chewie! Over the crest of the hill, you stumble into the porg flock. They're touched by your kindness and adopt you as one of their own."
 Porgs:
   next: Smurfs
-  special:
-    event: trivia
-    points: 100
   status: together
   text: "Who would've ever thought you would stumble across porgs in Philly?? You chase the porgs into a forest."
 RightWay:
@@ -657,9 +858,6 @@ Space:
   text: "The spaceship rumbles and suddenly blasts off! On the spaceship you find a notebook and a mysterious glowing box."
 SpookyPark:
   next: Rocket
-  special:
-    event: trivia
-    points: 100
   status: single
   text: "The sun has set and you really wished that you still had your friend with you. As you're walking by a park, you notice a strange metal contraption."
 TakeChoc:

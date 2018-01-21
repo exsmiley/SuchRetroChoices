@@ -63,6 +63,7 @@ func (story *Story) getStatus(storyId string) string {
 
 func (story *Story) needsToWait(storyId string) bool {
     el := story.elements[storyId]
+    log.Println("wait?", el)
     return !el.status || len(el.conditions) > 0
 }
 
@@ -96,7 +97,12 @@ func (story *Story) getActions(storyId string, next string) []string {
     } else if len(el.choices) > 0 {
         for _, choice := range el.choices {
             actions = append(actions, choice.text)
-        } 
+        }
+    } else if len(el.conditions) > 0 {
+        action, _ := story.abortCondition(storyId)
+        actions = append(actions, action)
+    } else if el.next != "" {
+        actions = append(actions, el.next)
     }
     return actions
 }
@@ -113,6 +119,10 @@ func (story *Story) makeChoice(storyId string, action string) (string, int) {
         if condition.next == action {
             return condition.next, condition.points
         }
+    }
+
+    if el.next == action {
+        return el.next, 0
     }
 
     return "", 0
@@ -142,6 +152,11 @@ func (story *Story) abortCondition(storyId string) (string, int) {
             return cond.next, cond.points
         }
     }
+
+    if el.next != "" {
+        return el.next, 0
+    }
+
     return "", 0
 }
 
@@ -181,7 +196,7 @@ func LoadStory() Story {
         log.Println(val)
         for k2, val2 := range val {
             if k2 == "status" {
-                el.status = val2.(string) == "single"
+                el.status = val2.(string) == "single" || val2.(string) == ""
             } else if k2 == "text" {
                 el.text = val2.(string)
             } else if k2 == "next" {
