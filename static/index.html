@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" href="/static/css/index.css">
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-warning">
   <a class="navbar-brand" href="#">Such Retro Choices</a>
   <ul class="navbar-nav">
     <li class="nav-item">
@@ -38,28 +38,20 @@
     <div class="container" id="room-container">
       <h3>Click a Player to Play With:</h3>
       <div id="room-select">No rooms available! :(</div>
-    <!-- <div id="room-select"></div> -->
-    
-    <div class="story">
-      <h3>Story</h3>
-      <section class="story-text">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
-              dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
-              aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
-              aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
-              Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
-            </p>
-      </section>
-    </div>
-    <div id="game" style="display: none;">
+    <!-- <div id="room-select"></div> -->    
+  </div>
+
+  <div id="game" style="display: none;">
       <div class="story">
         <h3>Story</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
-          dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
-          aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
-          aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
-          Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
-        </p>
+        <section class="story-text">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
+                dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
+                aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
+                aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
+                Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
+              </p>
+        </section>
       </div>
       <div class="choices">
         <h3>Choices</h3>
@@ -70,7 +62,6 @@
       </div>
 
     </div>
-  </div>
 
   <div class="msg-container">
     <ul id="messages"></ul>
@@ -223,7 +214,7 @@
         $('.choices-list').html('');
         choices.forEach(function (action) {
           $('.choices-list')
-            .append($('<li>').text(action).addClass('action-item btn-light'));
+            .append($('<li>').text(action).addClass('action-item btn-warning'));
         });
         $('.action-item').click(function (e) {
           socket.emit('action', e.target.textContent);
