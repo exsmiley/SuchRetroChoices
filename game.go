@@ -47,6 +47,12 @@ type GameState struct {
     Image string
 }
 
+type EndState struct {
+    Text string
+    Image string
+    Score int
+}
+
 
 func newGameMaster(story *Story) GameMaster {
     gm := GameMaster{}
@@ -153,6 +159,22 @@ func (gm *GameMaster) hasEnded(playerCookie string) bool {
     lastState := states[len(states)-1]
     return gm.story.hasEnded(lastState)
 }
+
+func (gm *GameMaster) endState(playerCookie string) EndState {
+    story := gm.story
+    player := gm.getPlayer(playerCookie)
+    states := player.states
+    lastState := states[len(states)-1]
+
+
+    image := story.getImage(lastState)
+    text := story.getText(lastState)
+
+    es := EndState{text, image, player.score}
+
+    return es
+}
+
 
 func (gm *GameMaster) abortWait(playerCookie string, state string) {
     // give them 15 seconds to catch up TODO maybe make longer

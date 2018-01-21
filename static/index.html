@@ -217,13 +217,14 @@
       });
 
       var stateData;
+      var over = false;
 
       socket.on('state', function (data) {
         $("#game").show();
         $('#room-container').hide();
         if(stateData == data) {
           return
-        } else {
+        } else if(!over) {
           console.log(data);
           stateData = data
           var waiting = data["Waiting"];
@@ -246,9 +247,13 @@
             $('.story-text').append($('<p>').text("You are waiting on the other player's actions..."));
           }
         }
-        
-        
       });
+
+      socket.on('end', function (data) {
+        over = true;
+        console.log(data)
+      })
+
     });
   </script>
 
