@@ -73,6 +73,10 @@ nav {
   border-radius: 5px;
   padding: 0.5em 1em; }
 
+#story-img, #end-img {
+  width: 80%;
+  margin: 1em; }
+
 @media (min-width: 991px) {
   .grid-container {
     padding-bottom: 0;
