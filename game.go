@@ -42,6 +42,7 @@ type GameState struct {
     Text string
     Special string
     Actions []string
+    Image string
 }
 
 
@@ -212,11 +213,12 @@ func (gm *GameMaster) getState(playerCookie string) GameState {
 
 
     actions := story.getActions(lastState, player.next)
+    image := story.getImage(lastState)
     text := story.getText(lastState)
 
     // fmt.Println(game.waiting, playerCookie)
 
-    gs := GameState{waiting, text, "", actions}
+    gs := GameState{waiting, text, "", actions, image}
 
     // fmt.Println("sending", gs)
 

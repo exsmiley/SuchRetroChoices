@@ -37,6 +37,7 @@ type Element struct {
     status bool // true if single
     text string
     next string
+    image string // url to an image
     special Special
     choices []Choice
     conditions []Condition
@@ -50,6 +51,10 @@ type Story struct {
 
 func (story *Story) getText(storyId string) string {
     return story.elements[storyId].text
+}
+
+func (story *Story) getImage(storyId string) string {
+    return story.elements[storyId].image
 }
 
 func (story *Story) getStatus(storyId string) string {
@@ -170,7 +175,9 @@ func LoadStory() Story {
                 el.text = val2.(string)
             } else if k2 == "next" {
                 el.next = val2.(string)
-            }else if k2 == "conditions" {
+            } else if k2 == "image" {
+                el.image = val2.(string)
+            } else if k2 == "conditions" {
                 
                 val22 := val2.([]interface{})
                 for _, v := range val22 {

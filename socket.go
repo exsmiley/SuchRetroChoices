@@ -51,7 +51,7 @@ func handleStartup(gm *GameMaster, cookie string, so socketio.Socket) {
 func reloadGameRoom(gm *GameMaster, cookie string, so socketio.Socket) {
     for !gm.isInActiveGame(cookie) {
         so.Emit("room", gm.getRooms(cookie))
-        time.Sleep(1000 * time.Millisecond)
+        time.Sleep(300 * time.Millisecond)
     }
 
     log.Println("got here!")
@@ -59,7 +59,7 @@ func reloadGameRoom(gm *GameMaster, cookie string, so socketio.Socket) {
     // emit state information once in a game
     for gm.isInActiveGame(cookie) {
         so.Emit("state", gm.getState(cookie))
-        time.Sleep(1000 * time.Millisecond)
+        time.Sleep(300 * time.Millisecond)
     }   
 }
 
