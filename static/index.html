@@ -12,6 +12,13 @@
     <link rel="icon" 
       type="image/png" 
       href="/static/favicon.png">
+      <style>
+      .divider{
+    width:5px;
+    height:auto;
+    display:inline-block;
+}
+    </style>
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-warning">
@@ -236,9 +243,9 @@
 
         if(data["Rooms"].length > 0 && hasName && rooms != data["Rooms"]) {
           rooms = data["Rooms"]
-          rooms.forEach(function (element) {
           $('#room-select').html('');
-          $('#room-select').append('<button class="room-button btn btn-primary" onClick="joinRoomFunc(this)" id="' + element["HostId"] +'">' + element["HostName"] + '</button>')
+          rooms.forEach(function (element) {
+          $('#room-select').append('<button class="room-button btn btn-primary" onClick="joinRoomFunc(this)" id="' + element["HostId"] +'">' + element["HostName"] + '</button><div class="divider"/>')
           });
         } else {
           $('#room-select').html('No rooms available! :(');
@@ -314,8 +321,17 @@
         $('#end').show();
       });
 
+      socket.on("quit", function(derp) {
+        console.log("quit the game :O")
+        if(derp) {
+          over = false;
+          $("#game").hide();
+          $('#room-container').show();
+        }
+      })
+
       $('#quit-game-button').click(function () {
-        socket.emit('quit');
+        socket.emit('quit', "");
       });
 
     });

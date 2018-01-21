@@ -102,6 +102,14 @@ func (gm *GameMaster) hostGame(playerCookie string) string {
     return game.Id
 }
 
+func (gm *GameMaster) quit(playerCookie string) {
+    log.Println("Quitting!")
+    otherPlayer := gm.getOtherPlayer(playerCookie)
+    delete(gm.games, gm.playerToGame[playerCookie])
+    gm.hostGame(otherPlayer.cookie)
+    gm.hostGame(playerCookie)
+}
+
 func (gm *GameMaster) getOtherPlayer(playerCookie string) Player {
     game := gm.games[gm.playerToGame[playerCookie]]
     for cookie, player := range game.players {
@@ -120,7 +128,7 @@ func (gm *GameMaster) getRooms(playerCookie string) GameRooms {
 
     for _, game := range gm.games {
         hostId := game.host
-        if hostId == playerCookie || hosts[hostId] {
+        if hostId == playerCookie || hosts[hostId] || gm.isInActiveGame(hostId) {
             continue
         }
 

@@ -101,6 +101,11 @@ func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
 
         so.On("action", func(action string) {
             // actOther := gm.doAction(cookie, action)
+            // if they quit
+            if !gm.isInActiveGame(cookie) {
+                return
+            }
+
             gm.doAction(cookie, action)
 
             if(!gm.hasEnded(cookie)) {
@@ -116,8 +121,16 @@ func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
             } else {
                 so.Emit("end", gm.endState(cookie))
             }
+        })
 
-            
+        so.On("quit", func(derp string) {
+            channel := gm.getGame(cookie).Id
+            gm.quit(cookie)
+            go reloadGameRoom(gm, cookie, so)
+            so.BroadcastTo(channel, "quit", true)
+            so.Emit("quit", true)
+            // meh too lazy to figure out how to all leave
+            so.Leave(channel)
         })
 
         so.Join("chatTest")
