@@ -24,7 +24,7 @@
       <a class="nav-link" href="#about">About</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#contact">Contact</a>
+      <a class="nav-link" id="contact-nav" href="#contact">Contact</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#" data-toggle="modal" data-target="#player-name-modal">Change Name</a>
@@ -33,6 +33,12 @@
         <a class="nav-link" href="#" data-toggle="modal" data-target="#room-modal">Join Room</a>
     </li> -->
   </ul>
+  <div class="alert alert-warning alert-dismissable fade" id="why-alert" style="position:fixed;top:50px;left:30%;width:40%;">
+    Why do you want to contact us over such a hacky hack? You must have something better to do with your life.
+    <button type="button" class="close" id="hide-why-alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 </nav>
 
 <body>
@@ -131,7 +137,12 @@
 
   <script>
     $(function () {
-
+      $('#contact-nav').click(function () {
+        $('#why-alert').addClass('show');
+      });
+      $('#hide-why-alert').click(function () {
+        $('#why-alert').removeClass('show');
+      });
       
       // sending stuffs
       var sendName = function () {
@@ -240,8 +251,6 @@
       });
     });
   </script>
-
-  <script src="/static/js/game.js"></script>
 
 </body>
 
