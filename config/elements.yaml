@@ -26,11 +26,13 @@ AnotherDitcher:
   text: "Hey, looks like there is another kid who decided to ditch the tour. What do you want to do?"
 AnswerTrivia:
   status: single
+  image: http://appcheaters.com/wp-content/uploads/2016/09/trivia.jpeg
   text: "Answer questions correctly in order to earn as many points as possible. Be warned though, answer incorrectly and you will lose points"
   next: Question1A
 
 Question1A:
   status: single
+  image: https://i0.wp.com/media2.slashfilm.com/slashfilm/wp/wp-content/images/ZZ272663D2.jpg
   text: "What is the name of the island in which Jurassic Park takes place?"
   choice:
     -
@@ -57,6 +59,7 @@ Question1B:
 
 Question2A:
   status: single
+  image: https://upload.wikimedia.org/wikipedia/en/9/96/Jurassic_Park_logo.jpg
   text: "What is Jurassic Park's Tagline?"
   choice:
     -
@@ -84,6 +87,7 @@ Question2B:
 
 Question3A:
   status: single
+  image: https://cdn1.thr.com/sites/default/files/imagecache/landscape_928x523/2015/04/mcdjupa_ec032_h.jpg
   text: "What type of dinosaur does T-rex eat in the film?"
   choice:
     -
@@ -111,6 +115,7 @@ Question3B:
 
 Question4A:
   status: single
+  image: https://az616578.vo.msecnd.net/files/2017/03/05/636243282134517774-314545726_music9.jpg
   text: "Who composed the soundtrack to Jurassic Park"
   choice:
     -
@@ -138,6 +143,7 @@ Question4B:
 
 Question5A:
   status: single
+  image: https://nerdist.com/wp-content/uploads/2017/06/Jurassic-WOrld.png
   text: "How minutes of screen time do the dinos have in the movie Jurassic Park?"
   choice:
     -
@@ -162,6 +168,7 @@ Question5B:
 EndTrivia:
   status: single
   text: "congrats you have reached the end of the trivia game. how well did you do?"
+  image: https://i0.wp.com/graphitepublications.com/wp-content/uploads/2016/12/the-end.jpg?fit=640%2C360&ssl=1
   special:
     event: ENDING
     points: 0
@@ -179,8 +186,10 @@ Aunt1:
       points: 0
       text: "no chocolate is worth 300 points."
   status: single
+  image: https://madmikesamerica.com/wp-content/uploads/2010/12/angry_old_woman2.jpg
   text: "Your aunt isn't too happy that you're skipping school, even if it's for a field trip. However, she's also prone to bribery, and perhaps if you bribe her with chocolate she won't send you back to school."
 BefriendFreddy1:
+  image: https://cdn.shopify.com/s/files/1/0558/2081/products/Pullin_NOES_Final_1024x1024.jpg?v=1430346761
   next: FreddyNightmare2
   special:
     event: "Freddy chases you through your dreams"
@@ -193,6 +202,7 @@ BefriendFreddy2:
     event: "You befriend Freddy"
     points: 800
   status: single
+  image: https://img.cinemablend.com/quill/a/6/8/7/0/8/a687082e488152319c348cf5282ae11e524a866b.jpg
   text: "At first it looks like Freddy might try to attack you again like last time. But you're patient and it pays off."
 BreakAway:
   conditions:
@@ -206,11 +216,13 @@ BreakAway:
   text: "You're walking along when all of a sudden you see an unguaded exit and leave the park."
 ChatWithFerris:
   next: FerrisTriviaQ
+  image: http://shelbyparkpictureshow.com/wp-content/uploads/2016/07/Ferris-Bueller-poster.jpg
   status: single
   text: "Ferris is so glad you decided to talk with him for a bit! He even offers you some bonus points if you can answer this question correctly!"
 
 FerrisTriviaQ:
   status: single
+  image: https://cdn1.thr.com/sites/default/files/2014/06/36_ferris_buellers_day_off.JPG
   text: "What year was the movie Ferris Bueller's Day Off released in?"
   choice:
     -
@@ -244,8 +256,10 @@ ChocRiver:
       points: 400
       text: "You decide to stand your ground and see what's in the river"
   status: single
+  image: http://4.bp.blogspot.com/-9ko6YYICZf8/Ub4JORWmw-I/AAAAAAAAAGM/tWPAd9Hxv68/s1600/Screen+Shot+2013-06-12+at+10.03.39+PM.png
   text: "there's something rippling in the water . . . a very forboding theme song plays in the background that sounds like da-dun da-dun da-dun"
 City1:
+  image: https://i.pinimg.com/originals/4b/13/13/4b13135314496083f9274062c8b42df5.jpg
   Choice:
     -
       text: RightWay
@@ -258,6 +272,7 @@ City1:
   status: together
   text: "Shadows creep along the sidewalks, and even the wind seems malicious as it whips through the streets. You're sure glad you have a friend with you. However, you've reached an intersection. Do you want to go left or right?"
 DeepSpace:
+  image: http://www.swtorstrategies.com/wp-content/uploads/2016/05/should-you-be-on-the-dark-side-or-the-light-side-of-the-force-707130-750x410.jpg
   choice:
     -
       next: LightSide
@@ -270,6 +285,7 @@ DeepSpace:
   status: single
   text: "After many years in space, you must make a choice. Which side are you on?"
 ET:
+  image: https://cdn.movieweb.com/img.news.tops/NE1AYHiSuEwO56_1_a/Et-Extraterrestrial-Original-Ending-Script-Changes.jpg
   choice:
     -
       next: RocketTrivia1
@@ -413,6 +429,7 @@ ExploreAlone:
   text: "You decide to explore the city alone"
   points: 300
 Ferris:
+  image: https://thestudioexec.com/wp-content/uploads/2015/05/ferrisbueller.png
   choice:
     -
       next: ChatWithFerris
@@ -422,9 +439,6 @@ Ferris:
       next: Aunt1
       points: 100
       text: "Nah, you don't talk to strangers. Actually, your aunt's apartment is right down the street. You decide to visit her instead."
-  special:
-    event: "Ferris' face pops up"
-    result: "display image"
   status: single
   text: "Who is this strange kid?? He says he's lonely and wants someone to chat with. He seems harmless, but you're a bit nervous about talking to strangers . . ."
 FightInigo:
@@ -433,15 +447,15 @@ FightInigo:
       condition: "Runaway & FightHim2"
       next: Intersection1
       special:
-        event: "being a good citizen"
-        points: 300
       status: single
+      image: http://www.wnd.com/files/2013/01/Inigo-Montoya.jpg
       text: "Wow what a coward! You came to the other person's aid and fought Inigo, yet the other player ran away without even saying thanks!"
     -
       condition: "FightHim1 & FightHim2"
       next: Intersection2
       status: together
       text: "The two of you make the Dream Team and defeat Inigo in no time!"
+      image: http://www.wnd.com/files/2013/01/Inigo-Montoya.jpg
 FoodPrize:
   next: FoodTriviaQ
   status: single
@@ -450,6 +464,7 @@ FoodPrize:
 FoodTriviaQ:
   status: single
   text: "which decade was the Philly cheesesteak invented in?"
+  image: https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Cheesesteak_heaven.jpg/1200px-Cheesesteak_heaven.jpg
   choice:
     -
       next: FoodTriviaA
@@ -473,6 +488,7 @@ FoodTriviaA:
 
 
 FreddyNightmare:
+  image: https://images-na.ssl-images-amazon.com/images/I/51-L-NYBfrL._SY300_.jpg
   choice:
     -
       next: BefriendFreddy1
@@ -482,12 +498,10 @@ FreddyNightmare:
       next: End5
       points: -200
       text: "Luckily, you're an expert in Dream Kong Fu, and you decide to test out your skills now!"
-  special:
-    event: "Freddy stalks your dreams"
-    result: "pic pops up"
   status: single
   text: "As you're drifting off to sleep, a very unwelcome character materializes in your dream."
 FreddyNightmare2:
+  image: https://images-na.ssl-images-amazon.com/images/I/51-L-NYBfrL._SY300_.jpg
   choice:
     -
       next: BefriendFreddy2
@@ -516,6 +530,7 @@ HelpInigo:
 
 InigoTriviaQ:
   status: single
+  image: http://images2.fanpop.com/images/photos/8100000/Inigo-Montoya-the-princess-bride-inigo-montoya-8194141-255-303.jpg
   text: "Which of the following is NOT a line from The Princess Bride?"
   choice:
     -
@@ -541,6 +556,7 @@ InigoTriviaA:
 
 
 HelpInigo2:
+  image: http://images2.fanpop.com/images/photos/8100000/Inigo-Montoya-the-princess-bride-inigo-montoya-8194141-255-303.jpg
   conditions:
     -
       condition: "HelpIni & HelpIni"
@@ -551,6 +567,7 @@ HelpInigo2:
       next: PleaseAgree
   status: together
 IgnoreInigo:
+  image: http://images2.fanpop.com/images/photos/8100000/Inigo-Montoya-the-princess-bride-inigo-montoya-8194141-255-303.jpg
   choice:
     -
       goto: End1
@@ -573,6 +590,7 @@ IgnoreInigo:
   status: single
   text: "Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup."
 IgnoreInigo2:
+  image: http://images2.fanpop.com/images/photos/8100000/Inigo-Montoya-the-princess-bride-inigo-montoya-8194141-255-303.jpg
   conditions:
     -
       condition: "HelpIni & IgnoreIni"
@@ -613,6 +631,7 @@ InigoSpecialScreamer:
   text: "Hey! It's that kid you saw from earlier! What should you do?"
   with: InigoSpecialResponder
 Intersection1:
+  image: http://static.panoramio.com/photos/large/28216021.jpg
   choice:
     -
       text: "You live on Elm street. Sure, some people are a bit superstitious about the street's name, but you're not afraid of lil' Freddy Krueger."
@@ -625,6 +644,7 @@ Intersection1:
   status: single
   text: "It's getting pretty dark now and you kind of want to go home. Where is home?"
 Intersection2:
+  image: http://static.panoramio.com/photos/large/28216021.jpg
   choice:
     -
       name: Walnut
@@ -638,9 +658,7 @@ Intersection2:
   text: "You come across an intersection. Which street would you like to take?"
 Jaws:
   next: End15
-  special:
-    event: "display picture of jaws"
-    result: "show picture"
+  image: http://images.mentalfloss.com/sites/default/files/styles/insert_main_wide_image/public/poster_1.jpg
   status: single
   text: "Yikes. Shoulda stayed awawy from the waters after all."
 LeftWay:
@@ -656,6 +674,7 @@ LeftWay:
       status: single
       text: "Oh dear, it looks like you want to go different ways."
 LightSide:
+  image: https://cdn.vox-cdn.com/thumbor/8FZtvc_neQAUFIniFQ5Ru2xfQlM=/0x0:1024x429/1200x800/filters:focal(510x140:672x302)/cdn.vox-cdn.com/uploads/chorus_image/image/58012209/Star_Wars_Porg_Gift_Ideas.0.jpg
   choice:
     -
       next: PorgRescue
@@ -670,6 +689,7 @@ LightSide:
   status: single
   text: "You land on an island and notice a porg running for its life, chased by Chewie. Chewie looks pretty hungry. What do you do?"
 Mansion:
+  image: https://1cqgxm3l59yi2wwbnn3qy35h-wpengine.netdna-ssl.com/wp-content/uploads/2012/09/Beetlejuice-House-at-night.jpg
   conditions:
     -
       condition: "TakeChoc & Mansion"
@@ -682,6 +702,7 @@ Mansion:
       status: together
       text: "This mansion sure is creeeeepy! You seem to hear a haunting song in the background . . ."
 MysteryMan:
+  image: https://pbs.twimg.com/profile_images/668713969419350016/QiPmydsN.jpg
   choice:
     -
       next: HelpInigo
@@ -692,8 +713,9 @@ MysteryMan:
       next: IgnoreInigo
       points: 0
   status: single
-  text: "A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . ."
+  text: "A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup..."
 MysteryMan2:
+  image: https://pbs.twimg.com/profile_images/668713969419350016/QiPmydsN.jpg
   choice:
     -
       name: HelpIni
@@ -709,6 +731,7 @@ MysteryMan2:
   status: together
   text: "A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . . You and your friend must make a choice together, help the man or not?"
 NewYork:
+  image: https://nteb-mudflowermedia.netdna-ssl.com/wp-content/uploads/strange-noises-heard-around-the-world-march-2012.jpg
   choice:
     -
       next: Aunt1
@@ -726,6 +749,7 @@ PleaseAgree:
   status: together
   text: "Looks like you and your partner can't decide whether or not to both ignore or both help Inigo. Perhaps you need to try communicating clearer? Let's try this again."
 PorgRescue:
+  image: https://peopledotcom.files.wordpress.com/2017/12/porg.jpg
   choice:
     -
       next: End18
@@ -759,6 +783,7 @@ RightWay:
       status: single
       text: "Aw shucks, looks like you guys split up! It's falling dark fast, best hurry home now . . ."
 Rocket:
+  image: https://i.pinimg.com/736x/f5/57/71/f557713507dc56da57f7f0c142fcb703---a-space-odyssey-space-crafts.jpg
   choice:
     -
       next: Aunt1
@@ -771,6 +796,7 @@ Rocket:
   status: single
   text: "you can hardly believe your eyes. It's the rocket from 2001 Space Odyssey!"
 RocketTrivia1:
+  image: https://nerdist.com/wp-content/uploads/2016/04/2001spaceodyssey_1.jpg
   choice:
     -
       next: End9
@@ -802,6 +828,7 @@ RocketTrivia2:
       text: "1989"
   status: single
   text: "Which year was the movie ET released?"
+  image: https://images-na.ssl-images-amazon.com/images/I/814-9%2BLgNTL._SY445_.jpg
 RocketTrivia3:
   choice:
     -
@@ -840,6 +867,7 @@ ShakeShack:
       next: End7
       text: "You both enjoy delicious burgers and shakes. However, as you're leaving, you run into your aunt."
 Smurfs:
+  image: http://content.internetvideoarchive.com/content/photos/6802/747062_030.jpg
   choice:
     -
       name: TakeChoc
@@ -853,6 +881,7 @@ Smurfs:
   status: together
   text: "you chase the porgs into a dark forest inhabitated by smurfs. The smurfs offer you chocolate. Do you accept it?"
 Space:
+  image: http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2017/11/iStock-628496452.jpg
   choice:
     -
       next: ET
@@ -892,6 +921,7 @@ Talk:
   status: single
   text: "Looks like you're both going to the city! Do you want to explore the city together or separately?"
 Tunnel:
+  image: "https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0139/7863/tetris3_highres.png"
   choice:
     -
       next: End13
@@ -905,9 +935,6 @@ Tunnel:
     -
       next: End14
       text: "3-4"
-  special:
-    event: "tetris block image"
-    result: "display pic"
   status: single
   text: "You're in the tunnels and the sound is deafening now . . . turns out it's a cave in! Tetris blocks are falling everywhere! Answer the question to escape. How many squares are in any tetris blocK?"
 Walnut:
