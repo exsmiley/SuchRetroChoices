@@ -52,25 +52,43 @@
   </div>
 
   <div id="game" style="display: none;">
+    <div class="story">
+      <h3>Story</h3>
+      <section class="story-text">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
+          dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
+          aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
+          aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
+          Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
+        </p>
+      </section>
+    </div>
+    <div class="choices">
+      <h3>Choices</h3>
+      <ul class="choices-list">
+        <li>
+          <a class="btn btn-light">Run!</a>
+        </li>
+        <li>
+          <a class="btn btn-light">Stand the ground!</a>
+        </li>
+      </ul>
+    </div>
+  
+  </div>
+
+  <div id="end" style="display: none;">
       <div class="story">
-        <h3>Story</h3>
-        <section class="story-text">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
-                dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
-                aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
-                aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
-                Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
-              </p>
+        <h3>Ending</h3>
+        <section id="end-text">
         </section>
       </div>
       <div class="choices">
-        <h3>Choices</h3>
-        <ul class="choices-list">
-          <li><a class="btn btn-light">Run!</a></li>
-          <li><a class="btn btn-light">Stand the ground!</a></li>
-        </ul>
+        <h3>Score</h3>
+        <section id="end-score"
+        ></section>
       </div>
-
+    
     </div>
 
   <div class="msg-container bg-white">
@@ -257,8 +275,14 @@
       });
 
       socket.on('end', function (data) {
-        over = true;
-        console.log(data)
+        var endText = data["Text"];
+        var endImg = data["Image"];
+        var endScore = data["Score"];
+        $('#end-text').text(endText);
+        $('#end-score').text(endScore);
+
+        $('#game').hide();
+        $('#end').show();
       })
 
     });
