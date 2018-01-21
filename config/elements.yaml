@@ -570,7 +570,7 @@ IgnoreInigo:
   image: http://images2.fanpop.com/images/photos/8100000/Inigo-Montoya-the-princess-bride-inigo-montoya-8194141-255-303.jpg
   choice:
     -
-      goto: End1
+      next: End1
       points: -300
       text: "Well, you haven't been taking MMA classes for nothing. It's a FIGHT!"
     -
@@ -593,10 +593,10 @@ IgnoreInigo2:
   image: http://images2.fanpop.com/images/photos/8100000/Inigo-Montoya-the-princess-bride-inigo-montoya-8194141-255-303.jpg
   conditions:
     -
-      condition: "HelpIni & IgnoreIni"
+      condition: "HelpInigo2 & IgnoreInigo2"
       next: PleaseAgree
     -
-      condition: "IgnoreIni & IgnoreIni"
+      condition: "IgnoreInigo2 & IgnoreInigo2"
       next: Intersection2
       text: "Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup. He challenges you and your partner to a duel. The battle was long and furious, but eventually you defeat Inigo and escape."
   status: single
@@ -701,6 +701,76 @@ Mansion:
       next: Mansion2
       status: single
       text: "This mansion sure is creeeeepy! You seem to hear a haunting song in the background . . ."
+Mansion2:
+  status: single
+  text: "You run into a monster family dinner. They decide to play a game with you and your friend. If you can answer the following question correctly, they'll let you through the house. If not, you'll become their next meal."
+  image: http://www.gablescinema.com/media/filmassets/Beetlejuice_Poster.png.500x715_q85_crop-smart.jpg
+  next: BeetleQ
+
+BeetleQ:
+  status: single
+  text: "Who is directed the movie Beetlejuice?"
+  choice:
+    - name: Tim
+      next: BeetleCorrect
+      text: "Tim Burton"
+      points: 300
+
+    - name: Larry
+      next: End21
+      text: "Larry Wilson"
+      points: -100
+
+    - name: Sean
+      next: End21
+      text: "Sean Cunningham"
+      points: -100
+
+BeetleCorrect:
+  status: single
+  conditions:
+    - condition: "Tim & Larry"
+      text: "Lucky you, you selected the right answer, but your friend did not. The monsters ate your friend and now you must continue on your own. The monsters let you out into a nearby park where there's a strange hulking object. You creep closer to the mysterious thing."
+      next: Rocket
+      image: https://cdn.movieweb.com/img.news.tops/NEGVQBKfnCD8KK_2_a/Beetlejuice-Movie-Facts-Trivia-List.jpg
+      status: single
+
+    - condition: "Tim & Sean"
+      text: "Lucky you, you selected the right answer, but your friend did not. The monsters ate your friend and now you must continue on your own. The monsters let you out in a park where you spot a strange hulking object. What could it be? Curious, you creep closer to investigate."
+      next: Rocket
+      image: https://cdn.movieweb.com/img.news.tops/NEGVQBKfnCD8KK_2_a/Beetlejuice-Movie-Facts-Trivia-List.jpg
+      status: single
+
+    - condition: "Tim & Tim"
+      text: "Nice! You both selected the correct answer."
+      next: End22
+
+End22:
+  text: "Instead of eating you, the monsters chat with you and discover both of you guys are ditching. Being well educated monsters, they cast a spell on you both and send you back with the class on the fieldtrip. Even monsters have standards."
+  image: https://cdn.movieweb.com/img.news.tops/NEGVQBKfnCD8KK_2_a/Beetlejuice-Movie-Facts-Trivia-List.jpg
+
+End21:
+  status: single
+  text: "welp. wrong answer, buddy. Tim Burton was the director, and his monster fam ate you for dinner"
+  image: https://cdn.movieweb.com/img.news.tops/NEGVQBKfnCD8KK_2_a/Beetlejuice-Movie-Facts-Trivia-List.jpg
+
+
+Mansion1:
+  status: single
+  text: "Well it looks like your friend decided to take the chocolate but not you. You enter the mansion and find a banana."
+  next: Banana
+
+Banana:
+  status: single
+  image: https://i5.walmartimages.ca/images/Enlarge/580/6_r/875806_R.jpg
+  text: "You pick up the banana and all of a sudden you see shadows in the other room."
+  next: End20
+
+End20:
+  status: single
+  image: http://www.gablescinema.com/media/filmassets/Beetlejuice_Poster.png.500x715_q85_crop-smart.jpg
+  text: "You've stumbled across a monster family and they decide to adopt you (you didn't get a say in the matter on whether or not you wanted to be adopted)"
+  points: 200
 MysteryMan:
   image: https://pbs.twimg.com/profile_images/668713969419350016/QiPmydsN.jpg
   choice:
