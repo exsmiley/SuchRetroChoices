@@ -5,6 +5,7 @@ import (
     "net/http"
     "log"
     "time"
+    "os"
     // "crypto/sha256"
     // "encoding/hex"
 
@@ -41,6 +42,14 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
+    var port = os.Getenv("PORT")
+    if port == "" {
+        port = "8000"
+        fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+    }
+
+    port = ":" + port
+
     story := LoadStory()
     gm := newGameMaster(&story)
     // derp := Derp{}
@@ -73,5 +82,5 @@ func main() {
     r.HandleFunc("/hello", helloHandler)
 
     log.Println("Started Server!")
-    http.ListenAndServe(":8000", r)
+    http.ListenAndServe(port, r)
 }
