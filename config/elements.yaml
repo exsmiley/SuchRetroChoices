@@ -27,7 +27,7 @@ AnotherDitcher:
 AnswerTrivia:
   status: single
   text: "Answer questions correctly in order to earn as many points as possible. Be warned though, answer incorrectly and you will lose points"
-  next: Question1A
+  next: Question1
 
 Question1A:
   status: single
@@ -406,6 +406,12 @@ ExploreTogether:
       next: MysteryMan
       text: "Darn, it looks like the other student isn't interested with hanging out with you. Guess you'll have to continue alone. Hopefully there aren't any monsters lurking around."
   status: single
+
+ExploreAlone:
+  status: single
+  next: MysteryMan
+  text: "You decide to explore the city alone"
+  points: 300
 Ferris:
   choice:
     -
@@ -883,7 +889,7 @@ Talk:
       next: ExploreTogether
       points: 200
       text: "You've heard rumors of strange things happening on the streets. Perhaps it's better to take a buddy . . ."
-  status: together
+  status: single
   text: "Looks like you're both going to the city! Do you want to explore the city together or separately?"
 Tunnel:
   choice:

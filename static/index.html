@@ -151,6 +151,10 @@
         // console.log(derp.id)
         socket.emit('join', derp.id)
       }
+
+    function objectEquals(x, y) {
+      return JSON.stringify(x) == JSON.stringify(y)
+    }
   </script>
 
   <script>
@@ -222,7 +226,7 @@
         // rooms = data["Rooms"];
         console.log(rooms, data, hasName, data['Rooms'].length)
 
-        if(data["Rooms"].length > 0 && hasName && (!rooms || rooms != data["Rooms"])) {
+        if(data["Rooms"].length > 0 && hasName && rooms != data["Rooms"]) {
           rooms = data["Rooms"]
           rooms.forEach(function (element) {
           $('#room-select').html('');
@@ -240,7 +244,7 @@
       socket.on('state', function (data) {
         $("#game").show();
         $('#room-container').hide();
-        if(stateData == data) {
+        if(objectEquals(stateData, data)) {
           return
         } else if(!over) {
           console.log(data);
@@ -275,6 +279,7 @@
       });
 
       socket.on('end', function (data) {
+        over = true
         var endText = data["Text"];
         var endImg = data["Image"];
         var endScore = data["Score"];

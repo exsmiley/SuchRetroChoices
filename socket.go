@@ -100,16 +100,17 @@ func metaSocketHandler(gm *GameMaster) func(so socketio.Socket) {
         })
 
         so.On("action", func(action string) {
-            actOther := gm.doAction(cookie, action)
+            // actOther := gm.doAction(cookie, action)
+            gm.doAction(cookie, action)
 
             if(!gm.hasEnded(cookie)) {
                 // need check if waiting
-                if actOther == "help" {
-                    so.BroadcastTo(gm.getGame(cookie).Id, "help", gm.getState(cookie))
-                    // TODO put timeout and treat it as no
-                } else if actOther == "force" {
-                    so.BroadcastTo(gm.getGame(cookie).Id, "state", gm.getState(cookie))
-                }
+                // if actOther == "help" {
+                //     so.BroadcastTo(gm.getGame(cookie).Id, "help", gm.getState(cookie))
+                //     // TODO put timeout and treat it as no
+                // } else if actOther == "force" {
+                //     so.BroadcastTo(gm.getGame(cookie).Id, "state", gm.getState(cookie))
+                // }
                 // need check if force
                 so.Emit("state", gm.getState(cookie))
             } else {

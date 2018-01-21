@@ -11,7 +11,7 @@ type Player struct {
     score int
     states []string
     next string // used after a wait occurs
-    ended bool
+    ended bool // not used
 }
 
 type Game struct {
@@ -203,6 +203,11 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
     states := player.states
     game := gm.games[gm.playerToGame[playerCookie]]
     lastState := states[len(states)-1]
+
+    for lastState == "" && len(states) > 0 {
+        states = states[0:len(states)-1]
+        lastState = states[len(states)-1]
+    }
 
     log.Println(player, action, lastState)
 

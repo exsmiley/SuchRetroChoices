@@ -141,7 +141,10 @@ func (story *Story) checkConditions(storyId string, action1 string, action2 stri
             return cond.next
         }
     }
-    return ""
+
+    abort, _ := story.abortCondition(storyId)
+
+    return abort
 }
 
 func (story *Story) abortCondition(storyId string) (string, int) {
@@ -167,7 +170,7 @@ func (story *Story) hasEnded(storyId string) bool {
         return true
     }
 
-    return len(el.choices) == 0 && len(el.conditions) == 0 && el.special.event == ""
+    return len(el.choices) == 0 && len(el.conditions) == 0 && el.special.event == "" && el.next == ""
 }
 
 
