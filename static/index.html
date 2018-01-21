@@ -38,6 +38,18 @@
     <div class="container" id="room-container">
       <h3>Click a Player to Play With:</h3>
       <div id="room-select">No rooms available! :(</div>
+    <!-- <div id="room-select"></div> -->
+    
+    <div class="story">
+      <h3>Story</h3>
+      <section class="story-text">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur felis vel felis commodo, at iaculis mi
+              dapibus. Donec ullamcorper feugiat sapien eget finibus. Maecenas gravida neque et leo suscipit, ut bibendum quam
+              aliquam. Aliquam non tellus lectus. Vivamus sagittis imperdiet vestibulum. In id scelerisque enim. Suspendisse dapibus
+              aliquet tellus et aliquam. Aenean fermentum auctor augue, quis fermentum tellus venenatis id. Nulla sed aliquet erat.
+              Nulla sed mauris vestibulum, porttitor ipsum vitae, condimentum lorem.
+            </p>
+      </section>
     </div>
     <div id="game" style="display: none;">
       <div class="story">
@@ -201,10 +213,21 @@
         console.log(data)
       })
 
-      $('#room-modal').on('shown.bs.modal', function () {
-        console.log(rooms);
-        
-        
+      socket.on('state', function (data) {
+        console.log(data);
+        var waiting = data["Waiting"];
+        var text = data["Text"];
+        var choices = data["Actions"];
+        $('.story-text').html('');
+        $('.story-text').append($('<p>').text(text));
+        $('.choices-list').html('');
+        choices.forEach(function (action) {
+          $('.choices-list')
+            .append($('<li>').text(action).addClass('action-item btn-light'));
+        });
+        $('.action-item').click(function (e) {
+          socket.emit('action', e.target.textContent);
+        });
       });
     });
   </script>
