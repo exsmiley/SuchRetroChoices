@@ -260,7 +260,7 @@ ChocRiver:
   text: "there's something rippling in the water . . . a very forboding theme song plays in the background that sounds like da-dun da-dun da-dun"
 City1:
   image: https://i.pinimg.com/originals/4b/13/13/4b13135314496083f9274062c8b42df5.jpg
-  Choice:
+  choice:
     -
       text: RightWay
       next: RightWay
