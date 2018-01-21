@@ -27,7 +27,7 @@ AnotherDitcher:
 AnswerTrivia:
   status: single
   text: "Answer questions correctly in order to earn as many points as possible. Be warned though, answer incorrectly and you will lose points"
-  next: Question1
+  next: Question1A
 
 Question1A:
   status: single

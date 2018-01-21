@@ -11,7 +11,7 @@ type Player struct {
     score int
     states []string
     next string // used after a wait occurs
-    ended bool // not used
+    ended bool
 }
 
 type Game struct {
@@ -66,7 +66,8 @@ func newGameMaster(story *Story) GameMaster {
 // admin game stuff
 func (gm *GameMaster) isInActiveGame(playerCookie string) bool {
     game := gm.getGame(playerCookie)
-    return len(game.players) == 2
+    player := gm.getPlayer(playerCookie)
+    return len(game.players) == 2 && !player.ended
 }
 
 func (gm *GameMaster) getGame(playerCookie string) Game {
@@ -157,7 +158,13 @@ func (gm *GameMaster) hasEnded(playerCookie string) bool {
     player := gm.getPlayer(playerCookie)
     states := player.states
     lastState := states[len(states)-1]
-    return gm.story.hasEnded(lastState)
+
+    log.Println("my states to end", lastState, states)
+
+    player.ended = gm.story.hasEnded(lastState)
+    gm.games[gm.playerToGame[playerCookie]].players[playerCookie] = player
+
+    return player.ended
 }
 
 func (gm *GameMaster) endState(playerCookie string) EndState {
@@ -209,7 +216,7 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
         lastState = states[len(states)-1]
     }
 
-    log.Println(player, action, lastState)
+    log.Println("derpy", player, action, lastState)
 
     next, points := gm.story.makeChoice(lastState, action)
     player.score += points
@@ -240,12 +247,13 @@ func (gm *GameMaster) doAction(playerCookie string, action string) string {
         // TODO check other player first to see if they made an action?
         otherPlayer := gm.getOtherPlayer(playerCookie)
         otherLastState := otherPlayer.states[len(otherPlayer.states)-1]
-        log.Println(otherLastState, lastState)
 
         lastLastState := ""
         if len(states) > 1 {
             lastLastState = states[len(states)-2]
         }
+
+        log.Println(otherLastState, lastState, lastLastState)
 
         if otherLastState == lastState || otherLastState == lastLastState {
             game.waiting = playerCookie

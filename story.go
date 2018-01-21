@@ -170,6 +170,8 @@ func (story *Story) hasEnded(storyId string) bool {
         return true
     }
 
+    log.Println("check end", el)
+
     return len(el.choices) == 0 && len(el.conditions) == 0 && el.special.event == "" && el.next == ""
 }
 
