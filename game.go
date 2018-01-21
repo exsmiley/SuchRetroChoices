@@ -94,15 +94,18 @@ func (gm *GameMaster) hostGame(playerCookie string) string {
 func (gm *GameMaster) getRooms(playerCookie string) GameRooms {
     grs := GameRooms{[]GameRoom{}}
 
+    hosts := map[string]bool{}
+
     for _, game := range gm.games {
         hostId := game.host
-        if hostId == playerCookie {
+        if hostId == playerCookie || hosts[hostId] {
             continue
         }
 
         hostName := gm.getName(hostId)
         room := GameRoom{hostId, hostName}
         grs.Rooms = append(grs.Rooms, room)
+        hosts[hostId] = true
     }
 
     return grs
