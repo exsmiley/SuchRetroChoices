@@ -260,7 +260,7 @@ ChocRiver:
   text: "there's something rippling in the water . . . a very forboding theme song plays in the background that sounds like da-dun da-dun da-dun"
 City1:
   image: https://i.pinimg.com/originals/4b/13/13/4b13135314496083f9274062c8b42df5.jpg
-  Choice:
+  choice:
     -
       text: RightWay
       next: RightWay
@@ -269,7 +269,7 @@ City1:
       text: LeftWay
       next: LeftWay
       points: 300
-  status: together
+  status: single
   text: "Shadows creep along the sidewalks, and even the wind seems malicious as it whips through the streets. You're sure glad you have a friend with you. However, you've reached an intersection. Do you want to go left or right?"
 DeepSpace:
   image: http://www.swtorstrategies.com/wp-content/uploads/2016/05/should-you-be-on-the-dark-side-or-the-light-side-of-the-force-707130-750x410.jpg
@@ -313,7 +313,7 @@ EatingPlace:
       name: ShakeShack
       next: ShakeShack
       points: -200
-  status: together
+  status: single
   text: "There's a Shake Shack and a Halal food truck. Where do you want to eat?"
 End1:
   special:
@@ -453,7 +453,7 @@ FightInigo:
     -
       condition: "FightHim1 & FightHim2"
       next: Intersection2
-      status: together
+      status: single
       text: "The two of you make the Dream Team and defeat Inigo in no time!"
       image: http://www.wnd.com/files/2013/01/Inigo-Montoya.jpg
 FoodPrize:
@@ -565,7 +565,7 @@ HelpInigo2:
     -
       condition: "HelpIni & IgnoreIni"
       next: PleaseAgree
-  status: together
+  status: single
 IgnoreInigo:
   image: http://images2.fanpop.com/images/photos/8100000/Inigo-Montoya-the-princess-bride-inigo-montoya-8194141-255-303.jpg
   choice:
@@ -599,7 +599,7 @@ IgnoreInigo2:
       condition: "IgnoreIni & IgnoreIni"
       next: Intersection2
       text: "Inconceivable!! Turns out Inigo Montoya is prettttttty mad you wouldn't help him find Princess Buttercup. He challenges you and your partner to a duel. The battle was long and furious, but eventually you defeat Inigo and escape."
-  status: together
+  status: single
 InigoSpecialResponder:
   choice:
     -
@@ -654,7 +654,7 @@ Intersection2:
       name: 34th
       next: 34th
       text: "34th street"
-  status: together
+  status: single
   text: "You come across an intersection. Which street would you like to take?"
 Jaws:
   next: End15
@@ -666,7 +666,7 @@ LeftWay:
     -
       condition: "LeftWay & LeftWay"
       next: MysteryMan2
-      status: together
+      status: single
       text: "Awesome! You've chosen to stick together, something you're glad of as you round the corner and find . . ."
     -
       condition: "LeftWay & RightWay"
@@ -699,7 +699,7 @@ Mansion:
     -
       condition: "Mansion & Mansion"
       next: Mansion2
-      status: together
+      status: single
       text: "This mansion sure is creeeeepy! You seem to hear a haunting song in the background . . ."
 MysteryMan:
   image: https://pbs.twimg.com/profile_images/668713969419350016/QiPmydsN.jpg
@@ -728,7 +728,7 @@ MysteryMan2:
       points: 0
       text: "Walk on and ignore the man. You don't have time for shenanigans. Anyway, the guy seems pretty crazy, best stay away from him."
   fallback: PleaseAgree
-  status: together
+  status: single
   text: "A scruffy looking man with a strange accent approaches you. He needs your help finding a very special Princess Buttercup . . . You and your friend must make a choice together, help the man or not?"
 NewYork:
   image: https://nteb-mudflowermedia.netdna-ssl.com/wp-content/uploads/strange-noises-heard-around-the-world-march-2012.jpg
@@ -746,7 +746,7 @@ NewYork:
 PleaseAgree:
   next: MysteryMan2
   points: -100
-  status: together
+  status: single
   text: "Looks like you and your partner can't decide whether or not to both ignore or both help Inigo. Perhaps you need to try communicating clearer? Let's try this again."
 PorgRescue:
   image: https://peopledotcom.files.wordpress.com/2017/12/porg.jpg
@@ -768,14 +768,14 @@ PorgThanks:
   text: "You successfully outrun Chewie! Over the crest of the hill, you stumble into the porg flock. They're touched by your kindness and adopt you as one of their own."
 Porgs:
   next: Smurfs
-  status: together
+  status: single
   text: "Who would've ever thought you would stumble across porgs in Philly?? You chase the porgs into a forest."
 RightWay:
   conditions:
     -
       condition: "RightWay & RightWay"
       next: Intersection2
-      status: together
+      status: single
       text: "Awesome! You've chosen to stick together."
     -
       condition: "RightWay & LeftWay"
@@ -878,7 +878,7 @@ Smurfs:
       name: Mansion
       next: mansion
       text: "you don't take candy from strangers. But the smurfs are very insistent...perhaps a bit too insistent. They chase you into a mansion."
-  status: together
+  status: single
   text: "you chase the porgs into a dark forest inhabitated by smurfs. The smurfs offer you chocolate. Do you accept it?"
 Space:
   image: http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2017/11/iStock-628496452.jpg
@@ -904,7 +904,7 @@ TakeChoc:
     -
       condition: "TakeChoc & TakeChoc"
       next: WonkaWorld2
-      status: together
+      status: single
       text: "Wow! Lookslike you both a found golden ticket in your chocolate bars. You're teleported to Wonka's factory."
 Talk:
   choice:
@@ -942,7 +942,7 @@ Walnut:
     -
       condition: "Walnut & Walnut"
       next: Porgs
-      status: together
+      status: single
       text: "You both chose to go down Walnut street! You're walking past Rittenhouse Square when you notice . . ."
     -
       condition: "Walnut & 34th"
@@ -965,7 +965,7 @@ WonkaWorld1:
   text: "you hear a rumbling sound and the path diverges before you. where do you go?"
 WonkaWorld2:
   next: End12
-  status: together
+  status: single
   text: "both of you stumble into a bubble room. hungry, you indulge on the delicious candy . . ."
 start:
   choice:
