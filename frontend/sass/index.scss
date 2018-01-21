@@ -1,5 +1,6 @@
 $msg-area-height: 100px;
 $msg-form-height: 2.5em;
+$msg-area-width: 250px;
 
 html {
     box-sizing: border-box;
@@ -88,4 +89,21 @@ nav {
 .action-item {
     border-radius: 5px;
     padding: 0.5em 1em;
+}
+
+@media (min-width: 991px) {
+    .grid-container {
+        padding-bottom: 0;
+        padding-right: $msg-area-width;
+    }
+
+    .msg-container {
+        right: 0;
+        height: 80%;
+        width: $msg-area-width;
+    }
+
+    #msg-form input {
+        border-left: 2px solid #000;
+    }
 }
