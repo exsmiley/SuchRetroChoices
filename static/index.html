@@ -34,6 +34,8 @@
 
 <body>
   <div class="grid-container">
+
+    <!-- <div id="room-select"></div> -->
     
     <div class="story">
       <h3>Story</h3>
@@ -105,9 +107,20 @@
   <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 
+  <script type="text/javascript">
+    var socket = io();
+
+    function joinRoomFunc(derp) {
+        // console.log('I got triggered');
+        // console.log(derp.id)
+        socket.emit('join', derp.id)
+      }
+  </script>
+
   <script>
     $(function () {
-      var socket = io();
+
+      
       // sending stuffs
       var sendName = function () {
         var nameToSave = $('#pn').val().trim();
@@ -120,6 +133,9 @@
           $('#player-name-modal').modal('hide');
         }
       };
+
+      
+
       $('#namesave').click(sendName);
       $('#player-name-modal').keypress(function (k) {
         if (k.which == 13) {
@@ -163,13 +179,21 @@
       // receive current room list
       socket.on('room', function (data) {
         rooms = data["Rooms"];
+        rooms.forEach(function (element) {
+          $('#room-select').html('');
+          $('#room-select').append('<button class="room-button btn btn-primary" onClick="joinRoomFunc(this)" id="' + element["HostId"] +'">' + element["HostName"] + '</button>')
+        });
       });
+
+      socket.on('state', function(data) {
+        $('#room-select').html('');
+        console.log(data)
+      })
+
       $('#room-modal').on('shown.bs.modal', function () {
         console.log(rooms);
-        $('#room-select').html('');
-        rooms.forEach(function (element) {
-          $('#room-select').append('<button class="room-button btn btn-primary">' + element["HostName"] + '</button>')
-        });
+        
+        
       });
     });
   </script>

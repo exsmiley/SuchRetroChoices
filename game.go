@@ -37,10 +37,10 @@ type GameRooms struct {
 
 // struct to send back and forth
 type GameState struct {
-    waiting bool
-    text string
-    special string
-    actions []string
+    Waiting bool
+    Text string
+    Special string
+    Actions []string
 }
 
 

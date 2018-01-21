@@ -54,6 +54,8 @@ func reloadGameRoom(gm *GameMaster, cookie string, so socketio.Socket) {
         time.Sleep(1000 * time.Millisecond)
     }
 
+    log.Println("got here!")
+    log.Println(cookie, gm.getState(cookie))
     // emit state information once in a game
     so.Emit("state", gm.getState(cookie))
 }
